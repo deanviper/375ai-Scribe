@@ -244,6 +244,21 @@
       from { opacity: 0; transform: translateY(16px);}
       to { opacity: 1; transform: none;}
     }
+    .discord-link {
+      text-align: center;
+      font-size: 0.98rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .discord-link a {
+      color: var(--accent);
+      text-decoration: underline;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .discord-link a:hover {
+      color: #389FFF;
+    }
   </style>
   <script src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
@@ -254,6 +269,9 @@
       <h1>Scribe Leaderboard</h1>
       <p>Ranks are updated live from Google Sheets.<br>
       <span style="color:var(--accent);font-weight:600;">Please don't change your Discord username</span></p>
+    </div>
+    <div class="discord-link">
+      Join our Discord <a href="https://discord.gg/375ai" target="_blank" rel="noopener">here</a>
     </div>
     <div class="legend">
       <div class="legend-item"><span class="swatch scribe1"></span> Scribe 1: 0–149 XP</div>
