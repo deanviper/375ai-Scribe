@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Scribe Leaderboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <style>
+    :root {
+      --bg: #181c20;
+      --panel: #23272e;
+      --accent: #ff6f3c;
+      --scribe1: #ffe0b2;
+      --scribe2: #ffb266;
+      --hem: #ff3d14;
+      --text: #e0e0e0;
+      --muted: #b9c1c1;
+      --radius: 14px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.25);
+    }
+    body {
+      background: linear-gradient(135deg, #181c20 0%, #23272e 100%);
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 8px;
+    }
+    .container {
+      width: 100%;
+      max-width: 700px;
+      margin: 40px auto 0;
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px 20px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .header {
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 2.4rem;
+      color: var(--accent);
+      letter-spacing: 1px;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 8px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    .swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      display: inline-block;
+      border: 2px solid #fff2;
+    }
+    .scribe1 { background: var(--scribe1);}
+    .scribe2 { background: var(--scribe2);}
+    .hem { background: var(--hem);}
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #20242a;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    }
+    .leaderboard-table th, .leaderboard-table td {
+      padding: 14px 10px;
+      text-align: center;
+      font-size: 1.08rem;
+    }
+    .leaderboard-table th {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      border-bottom: 2px solid #fff2;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .leaderboard-table tr {
+      transition: background 0.2s;
+    }
+    .leaderboard-table tr:nth-child(even) {
+      background: #23272e;
+    }
+    .leaderboard-table tr:nth-child(odd) {
+      background: #20242a;
+    }
+    .rank {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+    .scribe1-bg { background: var(--scribe1) !important; color: #222 !important; }
+    .scribe2-bg { background: var(--scribe2) !important; color: #222 !important; }
+    .hem-bg { background: var(--hem) !important; color: #fff !important; }
+    @media (max-width: 600px) {
+      .container { padding: 16px 2px 12px 2px; }
+      .header h1 { font-size: 1.5rem; }
+      .legend { flex-direction: column; gap: 8px; }
+      .leaderboard-table th, .leaderboard-table td { padding: 10px 4px; font-size: 0.98rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Scribe Leaderboard</h1>
+      <p>Ranks are updated live from Google Sheets.<br>
+      <span style="color:var(--accent);font-weight:600;">Please don’t change your Discord username</span></p>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><span class="swatch scribe1"></span> Scribe 1: 0–149 XP</div>
+      <div class="legend-item"><span class="swatch scribe2"></span> Scribe 2: 150–399 XP</div>
+      <div class="legend-item"><span class="swatch hem"></span> HEMMINGWAY: 400+ XP</div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="leaderboard-table" id="leaderboard">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Username</th>
+            <th>Total Points</th>
+            <th>Tier</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="4" style="text-align:center;color:var(--muted);">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    // Google Sheets info
+    const sheetId = '18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo';
+    const sheetName = 'Temporary LB';
+    const query = encodeURIComponent('select A, B');
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tq=${query}`;
+
+    function getTier(points) {
+      if (points >= 400) return { name: 'HEMMINGWAY', class: 'hem-bg' };
+      if (points >= 150) return { name: 'Scribe 2', class: 'scribe2-bg' };
+      return { name: 'Scribe 1', class: 'scribe1-bg' };
+    }
+
+    function renderLeaderboard(data) {
+      const tbody = document.querySelector('#leaderboard tbody');
+      tbody.innerHTML = '';
+      // Sort by points descending
+      data.sort((a, b) => b.points - a.points);
+
+      data.forEach((row, i) => {
+        const tier = getTier(row.points);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="rank">${i + 1}</td>
+          <td>${row.username}</td>
+          <td>${row.points}</td>
+          <td class="${tier.class}">${tier.name}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function fetchLeaderboard() {
+      fetch(url)
+        .then(res => res.text())
+        .then(text => {
+          // Parse Google Visualization API response
+          const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\)/)[1]);
+          const table = json.table;
+          const data = [];
+          for (let i = 0; i < table.rows.length; i++) {
+            const username = table.rows[i].c[0]?.v || '';
+            const points = parseInt(table.rows[i].c[1]?.v || '0', 10);
+            if (username && !isNaN(points)) {
+              data.push({ username, points });
+            }
+          }
+          renderLeaderboard(data);
+        })
+        .catch(err => {
+          const tbody = document.querySelector('#leaderboard tbody');
+          tbody.innerHTML = `<tr><td colspan="4" style="color:var(--hem);text-align:center;">Failed to load leaderboard.</td></tr>`;
+        });
+    }
+
+    fetchLeaderboard();
+  </script>
+</body>
+</html>
