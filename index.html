@@ -199,20 +199,13 @@
     .leaderboard-table tr:hover {
       background: var(--row-hover) !important;
     }
-    .leaderboard-table tr.top-1 td {
-      background: linear-gradient(90deg, #FFD700 0%, #FFF8DC 100%) !important;
-      color: #222 !important;
-      font-weight: 700;
-    }
-    .leaderboard-table tr.top-2 td {
-      background: linear-gradient(90deg, #C0C0C0 0%, #F5F5F5 100%) !important;
-      color: #222 !important;
-      font-weight: 700;
-    }
+    .leaderboard-table tr.top-1 td,
+    .leaderboard-table tr.top-2 td,
     .leaderboard-table tr.top-3 td {
-      background: linear-gradient(90deg, #CD7F32 0%, #FFE4B5 100%) !important;
-      color: #222 !important;
-      font-weight: 700;
+      /* Remove special backgrounds for top 3 */
+      background: inherit !important;
+      color: inherit !important;
+      font-weight: inherit;
     }
     .rank {
       font-weight: 700;
