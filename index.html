@@ -90,11 +90,25 @@
     .scribe2-bg { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%) !important; color: #222 !important; }
     .hem-bg { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%) !important; color: #fff !important; }
     .table-scroll {
-      max-height: 340px;
+      max-height: 480px;
       overflow-y: auto;
       border-radius: var(--radius);
       box-shadow: 0 2px 12px rgba(0,0,0,0.10);
       background: #181c20;
+    }
+    /* Custom scrollbar */
+    .table-scroll::-webkit-scrollbar {
+      width: 8px;
+      background: #23272e;
+      border-radius: 8px;
+    }
+    .table-scroll::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%);
+      border-radius: 8px;
+    }
+    .table-scroll {
+      scrollbar-width: thin;
+      scrollbar-color: #389FFF #23272e;
     }
     .leaderboard-table {
       width: 100%;
@@ -147,14 +161,18 @@
 <body>
   <div class="container">
     <div class="header">
+      <h2 style="font-family:'Oswald',sans-serif;font-size:2rem;color:var(--accent);margin:0 0 2px 0;letter-spacing:2px;">375ai</h2>
       <h1>Scribe Leaderboard</h1>
       <p>Ranks are updated live from Google Sheets.<br>
-      <span style="color:var(--accent);font-weight:600;">Please don’t change your Discord username</span></p>
+      <span style="color:var(--accent);font-weight:600;">Please don't change your Discord username</span></p>
     </div>
     <div class="legend">
       <div class="legend-item"><span class="swatch scribe1"></span> Scribe 1: 0–149 XP</div>
       <div class="legend-item"><span class="swatch scribe2"></span> Scribe 2: 150–399 XP</div>
       <div class="legend-item"><span class="swatch hem"></span> HEMMINGWAY: 400+ XP</div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+      <input id="search" type="text" placeholder="Search username..." style="padding:7px 12px;border-radius:8px;border:none;background:#23272e;color:var(--text);font-size:1rem;outline:none;box-shadow:0 1px 4px #0002;transition:box-shadow .2s;width:180px;" />
     </div>
     <div class="table-scroll">
       <table class="leaderboard-table" id="leaderboard">
@@ -183,12 +201,16 @@
       return { name: 'Scribe 1', class: 'scribe1-bg' };
     }
 
+    let allData = [];
     function renderLeaderboard(data) {
       const tbody = document.querySelector('#leaderboard tbody');
       tbody.innerHTML = '';
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--muted);">No results</td></tr>`;
+        return;
+      }
       // Sort by points descending
       data.sort((a, b) => b.points - a.points);
-
       data.forEach((row, i) => {
         const tier = getTier(row.points);
         const tr = document.createElement('tr');
@@ -213,16 +235,30 @@
           return;
         }
         const dataTable = response.getDataTable();
-        const data = [];
+        allData = [];
         for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
-          data.push({
+          allData.push({
             username: dataTable.getValue(i, 0),
             points: parseInt(dataTable.getValue(i, 1), 10)
           });
         }
-        renderLeaderboard(data);
+        renderLeaderboard(allData);
       });
     }
+
+    // Search functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const search = document.getElementById('search');
+      search.addEventListener('input', function() {
+        const val = search.value.trim().toLowerCase();
+        if (!val) {
+          renderLeaderboard(allData);
+        } else {
+          const filtered = allData.filter(row => row.username.toLowerCase().includes(val));
+          renderLeaderboard(filtered);
+        }
+      });
+    });
   </script>
 </body>
 </html>
