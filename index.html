@@ -202,10 +202,8 @@
     .leaderboard-table tr.top-1 td,
     .leaderboard-table tr.top-2 td,
     .leaderboard-table tr.top-3 td {
-      /* Remove special backgrounds for top 3 */
-      background: inherit !important;
-      color: inherit !important;
-      font-weight: inherit;
+      /* Only remove special backgrounds for top 3, but do not override tier cell backgrounds */
+      /* No background or color override here */
     }
     .rank {
       font-weight: 700;
