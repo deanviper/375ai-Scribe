@@ -99,6 +99,14 @@
       animation: fadeInUp 1s ease-out 0.5s both;
     }
 
+    .last-updated {
+      text-align: center;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 1rem;
+      animation: fadeIn 1s ease-out both;
+    }
+
     .tabs {
       display: flex;
       justify-content: center;
@@ -549,6 +557,7 @@
 
     <!-- YAP Leaderboard -->
     <div class="tab-content active" id="yap-content">
+      <div class="last-updated" id="yap-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="search-container">
         <div class="search-input-wrapper">
           <i class="fas fa-search search-icon"></i>
@@ -562,6 +571,7 @@
 
     <!-- Gamer Leaderboard -->
     <div class="tab-content" id="gamer-content">
+      <div class="last-updated" id="gamer-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="legend">
         <div class="legend-item"><span class="swatch gamer1"></span> Gamer I: 0–199 XPs</div>
         <div class="legend-item"><span class="swatch gamer2"></span> Gamer II: 200–399 XPs</div>
@@ -580,6 +590,7 @@
 
     <!-- Scribe Leaderboard -->
     <div class="tab-content" id="scribe-content">
+      <div class="last-updated" id="scribe-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="legend">
         <div class="legend-item"><span class="swatch scribe1"></span> Scribe 1: 0–149 XP</div>
         <div class="legend-item"><span class="swatch scribe2"></span> Scribe 2: 150–399 XP</div>
