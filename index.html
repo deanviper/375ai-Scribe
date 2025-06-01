@@ -4,373 +4,426 @@
   <meta charset="utf-8">
   <title>375ai Leaderboards</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Charts loader -->
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Animation library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <style>
     :root {
-      --bg: #000000;
-      --panel: rgba(24,28,32,0.75);
-      --panel-blur: blur(16px);
-      --accent: #FE4208;
+      --bg: #050607;
+      --text: #ffffff;
+      --panel-bg: rgba(26, 26, 26, 0.85);
+      --border: rgba(255, 255, 255, 0.1);
+      --orange: #FF3D14;
+      --table-row: rgba(30, 30, 30, 0.5);
+      --highlight: rgba(255, 61, 20, 0.15);
       --gamer1: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%);
       --gamer2: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%);
       --faker: linear-gradient(135deg, #389FFF 0%, #FE4208 100%);
       --scribe1: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%);
       --scribe2: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%);
       --hem: linear-gradient(135deg, #389FFF 0%, #FE4208 100%);
-      --text: #e0e0e0;
-      --muted: #b9c1c1;
-      --radius: 22px;
-      --shadow: 0 8px 32px rgba(0,0,0,0.25);
-      --search-bg: #23272e;
-      --search-focus: #389FFF;
-      --row-hover: #232e3a;
-      --fade-in: fadeIn 0.7s;
-      --tab-active: #232e3a;
-      --tab-hover: #2a3a4d;
     }
+    
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
     body {
       background: var(--bg);
-      font-family: 'Inter', sans-serif;
       color: var(--text);
-      margin: 0;
+      font-family: 'Inter', sans-serif;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0 8px;
+      position: relative;
+      overflow-x: hidden;
     }
-    .container {
+    
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      max-width: 700px;
-      margin: 40px auto 0;
-      background: var(--panel);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 32px 20px 24px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      animation: var(--fade-in);
-      backdrop-filter: var(--panel-blur);
-      -webkit-backdrop-filter: var(--panel-blur);
-      border: 1.5px solid rgba(255,255,255,0.08);
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
     }
+    
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 6, 7, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: -1;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    
     .header {
       text-align: center;
+      margin-bottom: 2.5rem;
+      animation: fadeInDown 0.8s ease-out;
     }
-    .brand-title {
-      font-family: 'Oswald', sans-serif;
-      font-size: 2rem;
-      color: var(--accent);
-      margin: 0 0 2px 0;
-      letter-spacing: 2px;
+    
+    h1 {
+      font-size: 3.5rem;
       font-weight: 700;
-    }
-    .header h1 {
-      font-family: 'Oswald', sans-serif;
-      margin: 0 0 8px 0;
-      font-size: 2.2rem;
-      color: var(--text);
-      letter-spacing: 1px;
-      font-weight: 700;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.18);
-      border-bottom: 3px solid var(--accent);
-      display: inline-block;
-      padding-bottom: 4px;
-      background: linear-gradient(90deg, #389FFF 0%, #FE4208 100%);
+      margin-bottom: 0.8rem;
+      background: linear-gradient(90deg, #FF3D14, #FF6B14);
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
       background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+      animation: textGlow 2s ease-in-out infinite alternate;
     }
-    .header p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 1.1rem;
+    
+    .subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.25rem;
+      max-width: 600px;
+      margin: 0 auto;
+      animation: fadeInUp 1s ease-out 0.5s both;
     }
+
     .tabs {
       display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
     }
+
     .tab {
-      flex: 1;
-      padding: 12px;
-      text-align: center;
-      background: var(--search-bg);
-      border-radius: var(--radius);
+      padding: 1rem 2rem;
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 50px;
       cursor: pointer;
-      font-family: 'Oswald', sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      transition: all 0.2s;
-      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      color: var(--text);
     }
+
     .tab:hover {
-      background: var(--tab-hover);
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
     }
+
     .tab.active {
-      background: var(--tab-active);
-      border-color: var(--accent);
+      background: var(--orange);
+      border-color: var(--orange);
+      box-shadow: 0 0 20px rgba(255, 61, 20, 0.3);
     }
+
     .tab-content {
       display: none;
+      animation: fadeIn 0.5s ease-out;
     }
+
     .tab-content.active {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
+      display: block;
     }
+    
+    .search-container {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeIn 1s ease-out 0.3s both;
+    }
+    
+    .search-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    
+    #search-input {
+      width: 100%;
+      padding: 12px 20px 12px 45px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50px;
+      color: var(--text);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+    
+    #search-input:focus {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255, 61, 20, 0.2);
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+    }
+    
+    .table-wrapper {
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--panel-bg);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+    
+    .table-wrapper:hover {
+      box-shadow: 0 15px 40px rgba(255, 61, 20, 0.15);
+      transform: translateY(-5px);
+    }
+    
+    #table_div {
+      width: 100%;
+      max-height: 65vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--orange) rgba(255, 255, 255, 0.1);
+    }
+    
+    #table_div::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    #table_div::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    #table_div::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 61, 20, 0.5);
+      border-radius: 20px;
+    }
+    
+    #table_div table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    
+    #table_div th, #table_div td {
+      padding: 1rem 1.25rem;
+      font-size: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    #table_div thead {
+      background: linear-gradient(90deg, #FF3D14, #FF6B14);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    #table_div th {
+      font-weight: 600;
+      text-align: left;
+      letter-spacing: 0.5px;
+    }
+    
+    #table_div tbody tr {
+      transition: all 0.3s ease;
+    }
+    
+    #table_div tbody tr:nth-child(even) {
+      background: var(--table-row);
+    }
+    
+    #table_div tbody tr:hover {
+      background: var(--highlight);
+      transform: translateX(5px);
+    }
+
     .legend {
       display: flex;
       justify-content: center;
-      gap: 24px;
-      margin-bottom: 8px;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
     }
+
     .legend-item {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 1rem;
+      gap: 0.5rem;
+      font-size: 0.9rem;
       color: var(--text);
     }
+
     .swatch {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       border-radius: 4px;
       display: inline-block;
-      border: 2px solid #fff2;
-      background-clip: padding-box;
     }
+
     .gamer1, .scribe1 { background: var(--gamer1); }
     .gamer2, .scribe2 { background: var(--gamer2); }
     .faker, .hem { background: var(--faker); }
+
     .gamer1-bg, .scribe1-bg { background: var(--gamer1) !important; color: #222 !important; }
     .gamer2-bg, .scribe2-bg { background: var(--gamer2) !important; color: #222 !important; }
     .faker-bg, .hem-bg { background: var(--faker) !important; color: #fff !important; }
-    .search-bar-wrap {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 8px;
-      width: 100%;
-      position: relative;
-      z-index: 2;
-    }
-    .search-bar {
-      display: flex;
-      align-items: center;
-      background: var(--search-bg);
-      border-radius: 999px;
-      box-shadow: 0 1px 8px #0003;
-      padding: 5px 14px 5px 10px;
-      width: 220px;
-      transition: box-shadow .2s, border .2s;
-      border: 2px solid transparent;
-    }
-    .search-bar:focus-within {
-      border: 2px solid var(--search-focus);
-      box-shadow: 0 2px 16px #389fff44;
-      background: #232e3a;
-    }
-    .search-bar input {
-      background: transparent;
-      border: none;
-      color: var(--text);
-      font-size: 1rem;
-      outline: none;
-      width: 100%;
-      padding: 6px 0 6px 6px;
-      font-family: 'Inter', sans-serif;
-      transition: color 0.2s;
-    }
-    .search-bar input:focus {
-      color: #fff;
-    }
-    .search-icon {
-      color: var(--muted);
-      font-size: 1.1rem;
-      margin-left: 2px;
-      transition: color 0.2s;
-    }
-    .search-bar:focus-within .search-icon {
-      color: var(--search-focus);
-    }
-    .table-scroll {
-      max-height: 480px;
-      overflow-y: auto;
-      border-radius: var(--radius);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-      background: rgba(24,28,32,0.85);
-      transition: background 0.2s;
-    }
-    .table-scroll::-webkit-scrollbar {
-      width: 8px;
-      background: #23272e;
-      border-radius: 8px;
-    }
-    .table-scroll::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #232e3a 0%, #2a3a4d 100%);
-      border-radius: 8px;
-    }
-    .table-scroll {
-      scrollbar-width: thin;
-      scrollbar-color: #2a3a4d #23272e;
-    }
-    .leaderboard-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      background: transparent;
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-    .leaderboard-table th, .leaderboard-table td {
-      padding: 14px 10px;
-      text-align: center;
-      font-size: 1.08rem;
-      transition: background 0.2s;
-    }
-    .leaderboard-table th {
-      background: var(--accent);
-      color: #fff;
-      font-weight: 700;
-      border-bottom: 2px solid #fff2;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      font-family: 'Oswald', sans-serif;
-      letter-spacing: 0.5px;
-    }
-    .leaderboard-table tr {
-      transition: background 0.2s, opacity 0.3s;
-      opacity: 0;
-      animation: fadeIn 0.7s forwards;
-    }
-    .leaderboard-table tr:hover {
-      background: var(--row-hover) !important;
-    }
-    .rank {
-      font-weight: 700;
-      color: var(--accent);
-      font-size: 1.1rem;
-      font-family: 'Oswald', sans-serif;
-    }
-    .medal {
-      font-size: 1.4em;
-      margin-right: 4px;
-      vertical-align: middle;
-    }
-    .no-results {
-      text-align: center;
-      color: var(--muted);
-      padding: 32px 0 24px 0;
-      font-size: 1.1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      opacity: 0.8;
-    }
-    .no-results-icon {
-      font-size: 2.2rem;
-      color: #389FFF;
-      opacity: 0.7;
-    }
+
     .discord-link {
       text-align: center;
-      font-size: 0.98rem;
-      color: var(--muted);
-      margin-bottom: 8px;
+      margin-top: 2rem;
+      color: var(--text);
+      opacity: 0.8;
     }
+
     .discord-link a {
-      color: var(--accent);
-      text-decoration: underline;
+      color: var(--orange);
+      text-decoration: none;
       font-weight: 600;
-      transition: color 0.2s;
+      transition: color 0.3s ease;
     }
+
     .discord-link a:hover {
-      color: #389FFF;
+      color: #FF6B14;
     }
-    .yap-link {
-      text-align: center;
-      font-size: 0.98rem;
-      color: var(--muted);
-      margin-bottom: 8px;
+
+    @keyframes textGlow {
+      0% {
+        text-shadow: 0 0 10px rgba(255, 61, 20, 0.3);
+        transform: scale(1);
+      }
+      100% {
+        text-shadow: 0 0 20px rgba(255, 61, 20, 0.7);
+        transform: scale(1.03);
+      }
     }
-    .yap-link a {
-      color: var(--accent);
-      text-decoration: underline;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-    .yap-link a:hover {
-      color: #389FFF;
-    }
-    @media (max-width: 600px) {
-      .container { padding: 16px 2px 12px 2px; }
-      .brand-title { font-size: 1.3rem; }
-      .header h1 { font-size: 1.1rem; }
-      .legend { flex-direction: column; gap: 8px; }
-      .leaderboard-table th, .leaderboard-table td { padding: 10px 4px; font-size: 0.98rem; }
-      .search-bar { width: 100%; min-width: 0; position: sticky; top: 0; }
-      .search-bar-wrap { position: sticky; top: 0; background: rgba(24,28,32,0.85); z-index: 10; }
-      .tabs { flex-direction: column; }
-    }
+
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(16px);}
-      to { opacity: 1; transform: none;}
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 2rem 1rem;
+      }
+      
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .tabs {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .tab {
+        padding: 0.75rem 1rem;
+      }
+
+      .legend {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      
+      #table_div th, #table_div td {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+      }
     }
   </style>
-  <script src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
+  <video class="background-video" autoplay loop muted playsinline>
+    <source src="https://sachdev.b-cdn.net/hero-compressed.mp4" type="video/mp4">
+  </video>
+  <div class="overlay"></div>
+  
   <div class="container">
     <div class="header">
-      <div class="brand-title">375ai</div>
-      <h1>Leaderboards</h1>
-      <p>Ranks are updated live from Google Sheets.<br>
-      <span style="color:var(--accent);font-weight:600;">Please don't change your Discord username</span></p>
+      <h1>375ai Leaderboards</h1>
+      <p class="subtitle">Check out top users ranked by their performance scores</p>
     </div>
-    <div class="discord-link">
-      Join our Discord <a href="https://discord.gg/375ai" target="_blank" rel="noopener">here</a>
-    </div>
-    <div class="yap-link">
-      Check out the <a href="https://375yap-leaderboard.vercel.app/" target="_blank" rel="noopener">YAP leaderboard</a>
-    </div>
-    
+
     <div class="tabs">
-      <div class="tab active" data-tab="gamer">Gamer Leaderboard</div>
+      <div class="tab active" data-tab="yap">YAP Leaderboard</div>
+      <div class="tab" data-tab="gamer">Gamer Leaderboard</div>
       <div class="tab" data-tab="scribe">Scribe Leaderboard</div>
     </div>
 
+    <!-- YAP Leaderboard -->
+    <div class="tab-content active" id="yap-content">
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <i class="fas fa-search search-icon"></i>
+          <input id="yap-search" type="text" placeholder="Search for username..." autocomplete="off" />
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <div id="yap-table"></div>
+      </div>
+    </div>
+
     <!-- Gamer Leaderboard -->
-    <div class="tab-content active" id="gamer-content">
+    <div class="tab-content" id="gamer-content">
       <div class="legend">
         <div class="legend-item"><span class="swatch gamer1"></span> Gamer I: 0–199 XPs</div>
         <div class="legend-item"><span class="swatch gamer2"></span> Gamer II: 200–399 XPs</div>
         <div class="legend-item"><span class="swatch faker"></span> FAKER: 400+ XPs</div>
       </div>
-      <div class="search-bar-wrap">
-        <form class="search-bar" onsubmit="return false;">
-          <svg class="search-icon" width="18" height="18" viewBox="0 0 20 20" fill="none">
-            <path d="M14.32 13.1l3.58 3.59a1 1 0 01-1.42 1.42l-3.59-3.58a7 7 0 111.43-1.43zM9 15a6 6 0 100-12 6 6 0 000 12z" fill="currentColor"/>
-          </svg>
-          <input id="gamer-search" type="text" placeholder="Search username..." autocomplete="off" />
-        </form>
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <i class="fas fa-search search-icon"></i>
+          <input id="gamer-search" type="text" placeholder="Search for username..." autocomplete="off" />
+        </div>
       </div>
-      <div class="table-scroll">
-        <table class="leaderboard-table" id="gamer-leaderboard">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Username</th>
-              <th>Total XP</th>
-              <th>Tier</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td colspan="4" style="text-align:center;color:var(--muted);">Loading...</td></tr>
-          </tbody>
-        </table>
+      <div class="table-wrapper">
+        <div id="gamer-table"></div>
       </div>
     </div>
 
@@ -381,207 +434,362 @@
         <div class="legend-item"><span class="swatch scribe2"></span> Scribe 2: 150–399 XP</div>
         <div class="legend-item"><span class="swatch hem"></span> HEMMINGWAY: 400+ XP</div>
       </div>
-      <div class="search-bar-wrap">
-        <form class="search-bar" onsubmit="return false;">
-          <svg class="search-icon" width="18" height="18" viewBox="0 0 20 20" fill="none">
-            <path d="M14.32 13.1l3.58 3.59a1 1 0 01-1.42 1.42l-3.59-3.58a7 7 0 111.43-1.43zM9 15a6 6 0 100-12 6 6 0 000 12z" fill="currentColor"/>
-          </svg>
-          <input id="scribe-search" type="text" placeholder="Search username..." autocomplete="off" />
-        </form>
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <i class="fas fa-search search-icon"></i>
+          <input id="scribe-search" type="text" placeholder="Search for username..." autocomplete="off" />
+        </div>
       </div>
-      <div class="table-scroll">
-        <table class="leaderboard-table" id="scribe-leaderboard">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Username</th>
-              <th>Total Points</th>
-              <th>Tier</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td colspan="4" style="text-align:center;color:var(--muted);">Loading...</td></tr>
-          </tbody>
-        </table>
+      <div class="table-wrapper">
+        <div id="scribe-table"></div>
       </div>
     </div>
+
+    <div class="discord-link">
+      Join our Discord <a href="https://discord.gg/375ai" target="_blank" rel="noopener">here</a>
+    </div>
   </div>
+
   <script>
-    google.charts.load('current', { packages: ['table'] });
-    google.charts.setOnLoadCallback(initLeaderboards);
+    google.charts.load('current', {packages: ['table']});
+    google.charts.setOnLoadCallback(init);
 
-    // Tab switching
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
-      });
-    });
-
-    // Gamer Leaderboard
+    // Global variables
+    let yapData = [];
     let gamerData = [];
-    let rankedGamerData = [];
+    let scribeData = [];
+    let pfpMap = {};
+
+    function init() {
+      // Initialize all leaderboards
+      initYapLeaderboard();
+      initGamerLeaderboard();
+      initScribeLeaderboard();
+      setupTabSwitching();
+    }
+
+    function setupTabSwitching() {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Remove active class from all tabs and contents
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+          
+          // Add active class to clicked tab and corresponding content
+          tab.classList.add('active');
+          document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
+        });
+      });
+    }
+
+    // YAP Leaderboard Functions
+    function initYapLeaderboard() {
+      const SHEET_KEY = '1nE4NPgFSHka7ByLLKaHWaVaKARMCrmb-_e1ZvpdV-cE';
+      fetchPFPs(SHEET_KEY).then(pfps => {
+        pfpMap = pfps;
+        loadYapScores(SHEET_KEY);
+      });
+
+      document.getElementById('yap-search').addEventListener('input', handleYapSearch);
+    }
+
+    function loadYapScores(key) {
+      const q = new google.visualization.Query(
+        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Temporary%20LB&headers=1&tq=select%20A%2C%20B%20order%20by%20B%20desc`
+      );
+      q.send(res => {
+        const dt = res.getDataTable();
+        yapData = [];
+        for (let i = 0; i < dt.getNumberOfRows(); i++) {
+          yapData.push({
+            username: dt.getValue(i, 0),
+            points: dt.getValue(i, 1)
+          });
+        }
+        renderYapLeaderboard(yapData);
+      });
+    }
+
+    function handleYapSearch() {
+      const searchTerm = this.value.trim().toLowerCase();
+      const filtered = yapData.filter(user => 
+        user.username.toLowerCase().includes(searchTerm)
+      );
+      renderYapLeaderboard(filtered);
+    }
+
+    function renderYapLeaderboard(users) {
+      const tableDiv = document.getElementById('yap-table');
+      tableDiv.innerHTML = '';
+
+      if (users.length === 0) {
+        tableDiv.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-search" style="font-size: 2rem; opacity: 0.5; margin-bottom: 1rem;"></i>
+            <h3>No users found</h3>
+            <p>Try searching with a different username</p>
+          </div>
+        `;
+        return;
+      }
+
+      const table = document.createElement('table');
+      
+      // Create header
+      const thead = table.createTHead();
+      const headerRow = thead.insertRow();
+      ['#', 'User', 'Points'].forEach(headerText => {
+        const th = document.createElement('th');
+        th.textContent = headerText;
+        headerRow.appendChild(th);
+      });
+
+      // Create body
+      const tbody = table.createTBody();
+      users.forEach((user, index) => {
+        const row = tbody.insertRow();
+        
+        // Rank
+        const rankCell = row.insertCell();
+        if (index === 0) rankCell.innerHTML = '<span class="medal">🥇</span>';
+        else if (index === 1) rankCell.innerHTML = '<span class="medal">🥈</span>';
+        else if (index === 2) rankCell.innerHTML = '<span class="medal">🥉</span>';
+        else rankCell.textContent = index + 1;
+
+        // User with profile picture
+        const userCell = row.insertCell();
+        userCell.className = 'username-cell';
+        userCell.onclick = () => {
+          window.open(`https://twitter.com/${user.username}`, '_blank');
+        };
+
+        const img = document.createElement('img');
+        img.src = pfpMap[user.username] || 'https://via.placeholder.com/32';
+        img.className = 'pfp';
+        img.alt = `${user.username}'s profile`;
+        img.onerror = function() {
+          this.src = 'https://via.placeholder.com/32';
+        };
+        userCell.appendChild(img);
+
+        const usernameSpan = document.createElement('span');
+        usernameSpan.className = 'username-text';
+        usernameSpan.textContent = user.username;
+        userCell.appendChild(usernameSpan);
+
+        const twitterIcon = document.createElement('i');
+        twitterIcon.className = 'fab fa-twitter twitter-icon';
+        userCell.appendChild(twitterIcon);
+
+        // Points
+        const pointsCell = row.insertCell();
+        pointsCell.className = 'points';
+        pointsCell.textContent = user.points.toFixed(2);
+      });
+
+      tableDiv.appendChild(table);
+    }
+
+    // Gamer Leaderboard Functions
+    function initGamerLeaderboard() {
+      const SHEET_KEY = '1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw';
+      loadGamerScores(SHEET_KEY);
+      document.getElementById('gamer-search').addEventListener('input', handleGamerSearch);
+    }
+
+    function loadGamerScores(key) {
+      const q = new google.visualization.Query(
+        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Leaderboard&tq=select%20A,B`
+      );
+      q.send(res => {
+        const dt = res.getDataTable();
+        gamerData = [];
+        for (let i = 0; i < dt.getNumberOfRows(); i++) {
+          gamerData.push({
+            username: dt.getValue(i, 0),
+            points: parseInt(dt.getValue(i, 1), 10)
+          });
+        }
+        renderGamerLeaderboard(gamerData);
+      });
+    }
+
+    function handleGamerSearch() {
+      const searchTerm = this.value.trim().toLowerCase();
+      const filtered = gamerData.filter(user => 
+        user.username.toLowerCase().includes(searchTerm)
+      );
+      renderGamerLeaderboard(filtered);
+    }
+
     function getGamerTier(points) {
       if (points >= 400) return { name: 'FAKER', class: 'faker-bg' };
       if (points >= 200) return { name: 'Gamer II', class: 'gamer2-bg' };
       return { name: 'Gamer I', class: 'gamer1-bg' };
     }
 
-    function renderGamerLeaderboard(data, showTrueRank = false) {
-      const tbody = document.querySelector('#gamer-leaderboard tbody');
-      tbody.innerHTML = '';
-      if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="no-results">
-          <div class="no-results-icon">🔍</div>
-          No results
-        </td></tr>`;
+    function renderGamerLeaderboard(users) {
+      const tableDiv = document.getElementById('gamer-table');
+      tableDiv.innerHTML = '';
+
+      if (users.length === 0) {
+        tableDiv.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-search" style="font-size: 2rem; opacity: 0.5; margin-bottom: 1rem;"></i>
+            <h3>No users found</h3>
+            <p>Try searching with a different username</p>
+          </div>
+        `;
         return;
       }
-      data.forEach((row, i) => {
-        const tier = getGamerTier(row.points);
-        let rankDisplay = '';
-        if (showTrueRank) {
-          const trueRank = rankedGamerData.findIndex(r => r.username === row.username && r.points === row.points) + 1;
-          if (trueRank === 1) rankDisplay = '<span class="medal">🥇</span>';
-          else if (trueRank === 2) rankDisplay = '<span class="medal">🥈</span>';
-          else if (trueRank === 3) rankDisplay = '<span class="medal">🥉</span>';
-          else rankDisplay = trueRank;
-        } else {
-          if (i === 0) rankDisplay = '<span class="medal">🥇</span>';
-          else if (i === 1) rankDisplay = '<span class="medal">🥈</span>';
-          else if (i === 2) rankDisplay = '<span class="medal">🥉</span>';
-          else rankDisplay = i + 1;
+
+      const table = document.createElement('table');
+      
+      // Create header
+      const thead = table.createTHead();
+      const headerRow = thead.insertRow();
+      ['#', 'Username', 'Total XP', 'Tier'].forEach(headerText => {
+        const th = document.createElement('th');
+        th.textContent = headerText;
+        headerRow.appendChild(th);
+      });
+
+      // Create body
+      const tbody = table.createTBody();
+      users.forEach((user, index) => {
+        const tier = getGamerTier(user.points);
+        const row = tbody.insertRow();
+        
+        // Rank
+        const rankCell = row.insertCell();
+        if (index === 0) rankCell.innerHTML = '<span class="medal">🥇</span>';
+        else if (index === 1) rankCell.innerHTML = '<span class="medal">🥈</span>';
+        else if (index === 2) rankCell.innerHTML = '<span class="medal">🥉</span>';
+        else rankCell.textContent = index + 1;
+
+        // Username
+        const userCell = row.insertCell();
+        userCell.textContent = user.username;
+
+        // Points
+        const pointsCell = row.insertCell();
+        pointsCell.textContent = user.points;
+
+        // Tier
+        const tierCell = row.insertCell();
+        tierCell.className = tier.class;
+        tierCell.textContent = tier.name;
+      });
+
+      tableDiv.appendChild(table);
+    }
+
+    // Scribe Leaderboard Functions
+    function initScribeLeaderboard() {
+      const SHEET_KEY = '18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo';
+      loadScribeScores(SHEET_KEY);
+      document.getElementById('scribe-search').addEventListener('input', handleScribeSearch);
+    }
+
+    function loadScribeScores(key) {
+      const q = new google.visualization.Query(
+        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B`
+      );
+      q.send(res => {
+        const dt = res.getDataTable();
+        scribeData = [];
+        for (let i = 0; i < dt.getNumberOfRows(); i++) {
+          scribeData.push({
+            username: dt.getValue(i, 0),
+            points: parseInt(dt.getValue(i, 1), 10)
+          });
         }
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="rank">${rankDisplay}</td>
-          <td>${row.username}</td>
-          <td>${row.points}</td>
-          <td class="${tier.class}">${tier.name}</td>
-        `;
-        tbody.appendChild(tr);
+        renderScribeLeaderboard(scribeData);
       });
     }
 
-    // Scribe Leaderboard
-    let scribeData = [];
-    let rankedScribeData = [];
+    function handleScribeSearch() {
+      const searchTerm = this.value.trim().toLowerCase();
+      const filtered = scribeData.filter(user => 
+        user.username.toLowerCase().includes(searchTerm)
+      );
+      renderScribeLeaderboard(filtered);
+    }
+
     function getScribeTier(points) {
       if (points >= 400) return { name: 'HEMMINGWAY', class: 'hem-bg' };
       if (points >= 150) return { name: 'Scribe 2', class: 'scribe2-bg' };
       return { name: 'Scribe 1', class: 'scribe1-bg' };
     }
 
-    function renderScribeLeaderboard(data, showTrueRank = false) {
-      const tbody = document.querySelector('#scribe-leaderboard tbody');
-      tbody.innerHTML = '';
-      if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="no-results">
-          <div class="no-results-icon">🔍</div>
-          No results
-        </td></tr>`;
+    function renderScribeLeaderboard(users) {
+      const tableDiv = document.getElementById('scribe-table');
+      tableDiv.innerHTML = '';
+
+      if (users.length === 0) {
+        tableDiv.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-search" style="font-size: 2rem; opacity: 0.5; margin-bottom: 1rem;"></i>
+            <h3>No users found</h3>
+            <p>Try searching with a different username</p>
+          </div>
+        `;
         return;
       }
-      data.forEach((row, i) => {
-        const tier = getScribeTier(row.points);
-        let rankDisplay = '';
-        if (showTrueRank) {
-          const trueRank = rankedScribeData.findIndex(r => r.username === row.username && r.points === row.points) + 1;
-          if (trueRank === 1) rankDisplay = '<span class="medal">🥇</span>';
-          else if (trueRank === 2) rankDisplay = '<span class="medal">🥈</span>';
-          else if (trueRank === 3) rankDisplay = '<span class="medal">🥉</span>';
-          else rankDisplay = trueRank;
-        } else {
-          if (i === 0) rankDisplay = '<span class="medal">🥇</span>';
-          else if (i === 1) rankDisplay = '<span class="medal">🥈</span>';
-          else if (i === 2) rankDisplay = '<span class="medal">🥉</span>';
-          else rankDisplay = i + 1;
-        }
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="rank">${rankDisplay}</td>
-          <td>${row.username}</td>
-          <td>${row.points}</td>
-          <td class="${tier.class}">${tier.name}</td>
-        `;
-        tbody.appendChild(tr);
+
+      const table = document.createElement('table');
+      
+      // Create header
+      const thead = table.createTHead();
+      const headerRow = thead.insertRow();
+      ['#', 'Username', 'Total Points', 'Tier'].forEach(headerText => {
+        const th = document.createElement('th');
+        th.textContent = headerText;
+        headerRow.appendChild(th);
       });
+
+      // Create body
+      const tbody = table.createTBody();
+      users.forEach((user, index) => {
+        const tier = getScribeTier(user.points);
+        const row = tbody.insertRow();
+        
+        // Rank
+        const rankCell = row.insertCell();
+        if (index === 0) rankCell.innerHTML = '<span class="medal">🥇</span>';
+        else if (index === 1) rankCell.innerHTML = '<span class="medal">🥈</span>';
+        else if (index === 2) rankCell.innerHTML = '<span class="medal">🥉</span>';
+        else rankCell.textContent = index + 1;
+
+        // Username
+        const userCell = row.insertCell();
+        userCell.textContent = user.username;
+
+        // Points
+        const pointsCell = row.insertCell();
+        pointsCell.textContent = user.points;
+
+        // Tier
+        const tierCell = row.insertCell();
+        tierCell.className = tier.class;
+        tierCell.textContent = tier.name;
+      });
+
+      tableDiv.appendChild(table);
     }
 
-    function fetchGamerData() {
-      const query = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw/gviz/tq?sheet=Leaderboard&tq=select%20A,B'
-      );
-      query.send(function(response) {
-        if (response.isError()) {
-          document.querySelector('#gamer-leaderboard tbody').innerHTML =
-            '<tr><td colspan="4" style="color:var(--faker);text-align:center;">Failed to load leaderboard.</td></tr>';
-          return;
-        }
-        const dataTable = response.getDataTable();
-        gamerData = [];
-        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
-          gamerData.push({
-            username: dataTable.getValue(i, 0),
-            points: parseInt(dataTable.getValue(i, 1), 10)
-          });
-        }
-        rankedGamerData = [...gamerData].sort((a, b) => b.points - a.points);
-        rankedGamerData.forEach((row, i) => row.rank = i + 1);
-        renderGamerLeaderboard(rankedGamerData);
-      });
-    }
-
-    function fetchScribeData() {
-      const query = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B'
-      );
-      query.send(function(response) {
-        if (response.isError()) {
-          document.querySelector('#scribe-leaderboard tbody').innerHTML =
-            '<tr><td colspan="4" style="color:var(--hem);text-align:center;">Failed to load leaderboard.</td></tr>';
-          return;
-        }
-        const dataTable = response.getDataTable();
-        scribeData = [];
-        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
-          scribeData.push({
-            username: dataTable.getValue(i, 0),
-            points: parseInt(dataTable.getValue(i, 1), 10)
-          });
-        }
-        rankedScribeData = [...scribeData].sort((a, b) => b.points - a.points);
-        rankedScribeData.forEach((row, i) => row.rank = i + 1);
-        renderScribeLeaderboard(rankedScribeData);
-      });
-    }
-
-    function initLeaderboards() {
-      fetchGamerData();
-      fetchScribeData();
-
-      // Gamer search
-      document.getElementById('gamer-search').addEventListener('input', function() {
-        const val = this.value.trim().toLowerCase();
-        if (!val) {
-          renderGamerLeaderboard(rankedGamerData);
-        } else {
-          const filtered = rankedGamerData.filter(row => row.username.toLowerCase().includes(val));
-          renderGamerLeaderboard(filtered, true);
-        }
-      });
-
-      // Scribe search
-      document.getElementById('scribe-search').addEventListener('input', function() {
-        const val = this.value.trim().toLowerCase();
-        if (!val) {
-          renderScribeLeaderboard(rankedScribeData);
-        } else {
-          const filtered = rankedScribeData.filter(row => row.username.toLowerCase().includes(val));
-          renderScribeLeaderboard(filtered, true);
-        }
+    function fetchPFPs(key) {
+      return new Promise(resolve => {
+        const q = new google.visualization.Query(
+          `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?gid=0&headers=1&tq=select%20B%2C%20F`
+        );
+        q.send(res => {
+          const dt = res.getDataTable(), map = {};
+          for (let i = 0; i < dt.getNumberOfRows(); i++) {
+            map[dt.getValue(i, 0)] = dt.getValue(i, 1);
+          }
+          resolve(map);
+        });
       });
     }
   </script>
