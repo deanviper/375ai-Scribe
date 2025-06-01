@@ -188,6 +188,11 @@
       overflow-y: auto;
     }
     
+    .table-wrapper:hover {
+      box-shadow: 0 15px 40px rgba(255, 61, 20, 0.15);
+      transform: translateY(-5px);
+    }
+    
     .table-wrapper::-webkit-scrollbar {
       width: 8px;
       background: #23272e;
@@ -406,6 +411,13 @@
       border-radius: 50%;
       object-fit: cover;
       flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .username-cell:hover .pfp {
+      border-color: var(--orange);
+      transform: scale(1.1);
     }
 
     .username-text {
@@ -414,12 +426,34 @@
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: 1rem;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .username-text::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--orange);
+      transition: width 0.3s ease;
+    }
+
+    .username-cell:hover .username-text::after {
+      width: 100%;
     }
 
     .twitter-icon {
       color: #1DA1F2;
       margin-left: 0.5rem;
       flex-shrink: 0;
+      transition: color 0.3s ease;
+    }
+
+    .username-cell:hover .twitter-icon {
+      color: #1DA1F2;
     }
 
     /* Ranking styles */
@@ -450,38 +484,10 @@
       text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
     }
 
-    /* Table styles for all leaderboards */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-
-    th {
-      background: linear-gradient(90deg, #FF3D14, #FF6B14);
-      color: #fff;
+    .points {
       font-weight: 600;
-      text-align: left;
-      padding: 0.75rem 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      color: rgba(255, 255, 255, 0.9);
     }
-
-    td {
-      padding: 0.5rem 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    tr:hover {
-      background: var(--highlight);
-    }
-
-    /* Column widths for all tables */
-    th:nth-child(1), td:nth-child(1) { width: 10%; }
-    th:nth-child(2), td:nth-child(2) { width: 50%; }
-    th:nth-child(3), td:nth-child(3) { width: 20%; }
-    th:nth-child(4), td:nth-child(4) { width: 20%; }
 
     .no-results {
       text-align: center;
@@ -502,6 +508,24 @@
 
     .no-results p {
       font-size: 0.9rem;
+    }
+
+    /* Row animations */
+    .row-appear {
+      animation: slideInRight 0.4s ease-out forwards;
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
   </style>
 </head>
@@ -675,6 +699,10 @@
       const tbody = table.createTBody();
       users.slice(0, 50).forEach((user, index) => {
         const row = tbody.insertRow();
+        row.style.opacity = "0";
+        setTimeout(() => {
+          row.classList.add('row-appear');
+        }, index * 50);
         
         // Rank
         const rankCell = row.insertCell();
@@ -792,6 +820,10 @@
       users.slice(0, 50).forEach((user, index) => {
         const tier = getGamerTier(user.points);
         const row = tbody.insertRow();
+        row.style.opacity = "0";
+        setTimeout(() => {
+          row.classList.add('row-appear');
+        }, index * 50);
         
         // Rank
         const rankCell = row.insertCell();
@@ -812,6 +844,7 @@
 
         // Points
         const pointsCell = row.insertCell();
+        pointsCell.className = 'points';
         pointsCell.textContent = user.points;
 
         // Tier
@@ -892,6 +925,10 @@
       users.slice(0, 50).forEach((user, index) => {
         const tier = getScribeTier(user.points);
         const row = tbody.insertRow();
+        row.style.opacity = "0";
+        setTimeout(() => {
+          row.classList.add('row-appear');
+        }, index * 50);
         
         // Rank
         const rankCell = row.insertCell();
@@ -912,6 +949,7 @@
 
         // Points
         const pointsCell = row.insertCell();
+        pointsCell.className = 'points';
         pointsCell.textContent = user.points;
 
         // Tier
