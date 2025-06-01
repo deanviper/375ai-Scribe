@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>375ai Leaderboards</title>
+  <title>375 Multi Leaderboards</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts - Inter for Yap, Oswald for Gamer/Scribe -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
   <!-- Google Charts loader -->
   <script src="https://www.gstatic.com/charts/loader.js"></script>
   <!-- Font Awesome for icons -->
@@ -13,6 +13,7 @@
   <!-- Animation library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <style>
+    /* ======== Shared Variables ======== */
     :root {
       --bg: #050607;
       --text: #ffffff;
@@ -21,20 +22,18 @@
       --orange: #FF3D14;
       --table-row: rgba(30, 30, 30, 0.5);
       --highlight: rgba(255, 61, 20, 0.15);
-      --gamer1: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%);
-      --gamer2: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%);
-      --faker: linear-gradient(135deg, #389FFF 0%, #FE4208 100%);
-      --scribe1: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%);
-      --scribe2: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%);
-      --hem: linear-gradient(135deg, #389FFF 0%, #FE4208 100%);
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      --muted: rgba(255, 255, 255, 0.5);
+      --small-text: 0.9rem;
     }
-    
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    
+
     body {
       background: var(--bg);
       color: var(--text);
@@ -43,7 +42,8 @@
       position: relative;
       overflow-x: hidden;
     }
-    
+
+    /* ======== Background Video + Overlay ======== */
     .background-video {
       position: fixed;
       top: 0;
@@ -53,7 +53,7 @@
       object-fit: cover;
       z-index: -2;
     }
-    
+
     .overlay {
       position: fixed;
       top: 0;
@@ -64,7 +64,8 @@
       backdrop-filter: blur(8px);
       z-index: -1;
     }
-    
+
+    /* ======== Main Container ======== */
     .container {
       max-width: 1000px;
       margin: 0 auto;
@@ -72,259 +73,24 @@
       position: relative;
       z-index: 1;
     }
-    
+
     .header {
       text-align: center;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1rem;
       animation: fadeInDown 0.8s ease-out;
     }
-    
-    h1 {
-      font-size: 3.5rem;
+
+    .header h1 {
+      font-size: 3rem;
       font-weight: 700;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.5rem;
       background: linear-gradient(90deg, #FF3D14, #FF6B14);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       letter-spacing: -0.5px;
       animation: textGlow 2s ease-in-out infinite alternate;
-    }
-    
-    .subtitle {
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 1.25rem;
-      max-width: 600px;
-      margin: 0 auto;
-      animation: fadeInUp 1s ease-out 0.5s both;
-    }
-
-    .last-updated {
-      text-align: center;
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.5);
-      margin-bottom: 1rem;
-      animation: fadeIn 1s ease-out both;
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .tab {
-      padding: 1rem 2rem;
-      background: var(--panel-bg);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .tab:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .tab.active {
-      background: var(--orange);
-      border-color: var(--orange);
-      box-shadow: 0 0 20px rgba(255, 61, 20, 0.3);
-    }
-
-    .tab-content {
-      display: none;
-      animation: fadeIn 0.5s ease-out;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-    
-    .search-container {
-      margin: 1.5rem auto;
-      max-width: 500px;
-      width: 100%;
       position: relative;
-    }
-    
-    .search-input-wrapper {
-      position: relative;
-      width: 100%;
-    }
-    
-    #search-input {
-      width: 100%;
-      padding: 10px 20px 10px 40px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 50px;
-      color: var(--text);
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      outline: none;
-    }
-    
-    #search-input:focus {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: var(--orange);
-      box-shadow: 0 0 0 3px rgba(255, 61, 20, 0.2);
-    }
-    
-    .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255, 255, 255, 0.5);
-      pointer-events: none;
-    }
-    
-    .table-wrapper {
-      width: 100%;
-      border-radius: 16px;
-      overflow: hidden;
-      background: var(--panel-bg);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--border);
-      transition: all 0.3s ease;
-      max-height: 480px;
-      overflow-y: auto;
-    }
-    
-    .table-wrapper:hover {
-      box-shadow: 0 15px 40px rgba(255, 61, 20, 0.15);
-      transform: translateY(-5px);
-    }
-    
-    .table-wrapper::-webkit-scrollbar {
-      width: 8px;
-      background: #23272e;
-      border-radius: 8px;
-    }
-    
-    .table-wrapper::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #232e3a 0%, #2a3a4d 100%);
-      border-radius: 8px;
-    }
-    
-    .table-wrapper {
-      scrollbar-width: thin;
-      scrollbar-color: #2a3a4d #23272e;
-    }
-    
-    #table_div {
-      width: 100%;
-      max-height: 65vh;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--orange) rgba(255, 255, 255, 0.1);
-    }
-    
-    #table_div::-webkit-scrollbar {
-      width: 8px;
-    }
-    
-    #table_div::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-    }
-    
-    #table_div::-webkit-scrollbar-thumb {
-      background-color: rgba(255, 61, 20, 0.5);
-      border-radius: 20px;
-    }
-    
-    #table_div table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-    
-    #table_div th, #table_div td {
-      padding: 1rem 1.25rem;
-      font-size: 1rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    #table_div thead {
-      background: linear-gradient(90deg, #FF3D14, #FF6B14);
-      color: #fff;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    
-    #table_div th {
-      font-weight: 600;
-      text-align: left;
-      letter-spacing: 0.5px;
-    }
-    
-    #table_div tbody tr {
-      transition: all 0.3s ease;
-    }
-    
-    #table_div tbody tr:nth-child(even) {
-      background: var(--table-row);
-    }
-    
-    #table_div tbody tr:hover {
-      background: var(--highlight);
-      transform: translateX(5px);
-    }
-
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      color: var(--text);
-    }
-
-    .swatch {
-      width: 16px;
-      height: 16px;
-      border-radius: 4px;
-      display: inline-block;
-    }
-
-    .gamer1, .scribe1 { background: var(--gamer1); }
-    .gamer2, .scribe2 { background: var(--gamer2); }
-    .faker, .hem { background: var(--faker); }
-
-    .gamer1-bg, .scribe1-bg { background: var(--gamer1) !important; color: #222 !important; }
-    .gamer2-bg, .scribe2-bg { background: var(--gamer2) !important; color: #222 !important; }
-    .faker-bg, .hem-bg { background: var(--faker) !important; color: #fff !important; }
-
-    .discord-link {
-      text-align: center;
-      margin-top: 2rem;
-      color: var(--text);
-      opacity: 0.8;
-    }
-
-    .discord-link a {
-      color: var(--orange);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-
-    .discord-link a:hover {
-      color: #FF6B14;
     }
 
     @keyframes textGlow {
@@ -338,20 +104,12 @@
       }
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 1rem;
+      animation: fadeInUp 1s ease-out 0.5s both;
     }
 
     @keyframes fadeInUp {
@@ -365,62 +123,274 @@
       }
     }
 
-    @media (max-width: 768px) {
-      .container {
-        padding: 2rem 1rem;
-      }
-      
-      h1 {
-        font-size: 2.5rem;
-      }
-      
-      .subtitle {
-        font-size: 1rem;
-      }
-
-      .tabs {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-
-      .tab {
-        padding: 0.75rem 1rem;
-      }
-
-      .legend {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: center;
-      }
-      
-      #table_div th, #table_div td {
-        padding: 0.75rem 1rem;
-        font-size: 0.9rem;
-      }
+    /* ======== Category Buttons ======== */
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      animation: fadeIn 1s ease-out 0.7s both;
     }
 
-    /* YAP Leaderboard specific styles */
-    .username-cell {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+    .category-btn {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.6rem 1.2rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      padding: 0.5rem 0;
     }
 
-    .username-cell:hover {
+    .category-btn.active {
+      border-color: var(--orange);
       color: var(--orange);
     }
 
-    .pfp {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      object-fit: cover;
-      flex-shrink: 0;
-      border: 2px solid rgba(255, 255, 255, 0.2);
+    .category-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+    }
+
+    /* ======== Common FadeIn ======== */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* ======== YAP Leaderboard Styles ======== */
+    .search-container {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeIn 1s ease-out 0.3s both;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 12px 20px 12px 45px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50px;
+      color: var(--text);
+      font-size: 1rem;
       transition: all 0.3s ease;
+      outline: none;
+    }
+
+    #search-input:focus {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255, 61, 20, 0.2);
+    }
+
+    #search-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+    }
+
+    #clear-search {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.5);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    #clear-search:hover {
+      color: var(--orange);
+    }
+
+    .last-updated {
+      text-align: center;
+      font-size: var(--small-text);
+      color: var(--muted);
+      margin-bottom: 1rem;
+      animation: fadeIn 1s ease-out both;
+    }
+
+    .dashboard {
+      display: flex;
+      justify-content: center;
+      animation: fadeIn 1s ease-out 0.6s both;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--panel-bg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .table-wrapper:hover {
+      box-shadow: 0 15px 40px rgba(255, 61, 20, 0.15);
+      transform: translateY(-5px);
+    }
+
+    #table_div {
+      width: 100%;
+      max-height: 65vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--orange) rgba(255, 255, 255, 0.1);
+    }
+
+    #table_div::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #table_div::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    #table_div::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 61, 20, 0.5);
+      border-radius: 20px;
+    }
+
+    #table_div table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      color: var(--text);
+    }
+
+    #table_div th,
+    #table_div td {
+      padding: 1rem 1.25rem;
+      font-size: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+
+    #table_div thead {
+      background: linear-gradient(90deg, #FF3D14, #FF6B14);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    #table_div th {
+      font-weight: 600;
+      text-align: left;
+      letter-spacing: 0.5px;
+    }
+
+    #table_div th:nth-child(1),
+    #table_div td:nth-child(1) {
+      width: 4rem;
+      text-align: center;
+    }
+
+    #table_div th:nth-child(3),
+    #table_div td:nth-child(3) {
+      text-align: right;
+      width: 8rem;
+    }
+
+    #table_div tbody tr {
+      transition: all 0.3s ease;
+    }
+
+    #table_div tbody tr:nth-child(even) {
+      background: var(--table-row);
+    }
+
+    #table_div tbody tr:hover {
+      background: var(--highlight);
+      transform: translateX(5px);
+    }
+
+    /* Top 3 positions styling */
+    #table_div tbody tr:nth-child(1) td:first-child {
+      animation: pulseGold 2s infinite alternate;
+    }
+
+    #table_div tbody tr:nth-child(2) td:first-child {
+      animation: pulseSilver 2s infinite alternate;
+    }
+
+    #table_div tbody tr:nth-child(3) td:first-child {
+      animation: pulseBronze 2s infinite alternate;
+    }
+
+    @keyframes pulseGold {
+      0% {
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+      }
+      100% {
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+      }
+    }
+
+    @keyframes pulseSilver {
+      0% {
+        text-shadow: 0 0 5px rgba(192, 192, 192, 0.3);
+      }
+      100% {
+        text-shadow: 0 0 15px rgba(192, 192, 192, 0.8);
+      }
+    }
+
+    @keyframes pulseBronze {
+      0% {
+        text-shadow: 0 0 5px rgba(205, 127, 50, 0.3);
+      }
+      100% {
+        text-shadow: 0 0 15px rgba(205, 127, 50, 0.8);
+      }
+    }
+
+    .pfp {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-right: 0.75rem;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .username-cell {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
     }
 
     .username-cell:hover .pfp {
@@ -428,12 +398,11 @@
       transform: scale(1.1);
     }
 
+    .username-cell:hover .username-text {
+      color: var(--orange);
+    }
+
     .username-text {
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 1rem;
       transition: color 0.3s ease;
       position: relative;
     }
@@ -453,10 +422,47 @@
       width: 100%;
     }
 
+    .points {
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .no-results {
+      padding: 3rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .back-button {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      margin-top: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: none;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .back-button:hover {
+      background: var(--orange);
+      transform: translateY(-2px);
+    }
+
+    .highlighted {
+      background-color: var(--highlight) !important;
+    }
+
     .twitter-icon {
-      color: #1DA1F2;
-      margin-left: 0.5rem;
-      flex-shrink: 0;
+      margin-left: 6px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.5);
       transition: color 0.3s ease;
     }
 
@@ -464,99 +470,287 @@
       color: #1DA1F2;
     }
 
-    /* Ranking styles */
-    .rank-cell {
-      text-align: center;
-      font-weight: 600;
+    /* ======== Gamer & Scribe Styles ======== */
+    .tab-container {
+      display: none;
+      flex-direction: column;
+      gap: 2rem;
+      animation: fadeIn 0.7s ease-out both;
+    }
+
+    .tab-container.active {
+      display: flex;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 8px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-size: 1rem;
-      padding: 0.5rem 1rem;
+      color: var(--text);
     }
 
-    .rank-1 {
-      color: #FFD700;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    .swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      display: inline-block;
+      border: 2px solid #fff2;
+      background-clip: padding-box;
     }
 
-    .rank-2 {
-      color: #C0C0C0;
-      text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+    /* Gamer/Scribe gradients */
+    .gamer1 { background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%); }
+    .gamer2 { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%); }
+    .faker  { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%); }
+    .scribe1 { background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%); }
+    .scribe2 { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%); }
+    .hem    { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%); }
+
+    .gamer1-bg  { background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%) !important; color: #222 !important; }
+    .gamer2-bg  { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%) !important; color: #222 !important; }
+    .faker-bg   { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%) !important; color: #fff !important; }
+    .scribe1-bg { background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%) !important; color: #222 !important; }
+    .scribe2-bg { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%) !important; color: #222 !important; }
+    .hem-bg     { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%) !important; color: #fff !important; }
+
+    .search-bar-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 8px;
+      width: 100%;
+      position: relative;
+      z-index: 2;
     }
 
-    .rank-3 {
-      color: #CD7F32;
-      text-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: rgba(26, 26, 26, 0.85);
+      border-radius: 999px;
+      box-shadow: 0 1px 8px #0003;
+      padding: 5px 14px 5px 10px;
+      width: 220px;
+      transition: box-shadow .2s, border .2s;
+      border: 2px solid transparent;
     }
 
-    .rank-normal {
-      color: #ffffff;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    .search-bar:focus-within {
+      border: 2px solid #389FFF;
+      box-shadow: 0 2px 16px #389fff44;
+      background: #232e3a;
     }
 
-    .points {
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.9);
+    .search-bar input {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      width: 100%;
+      padding: 6px 0 6px 6px;
+      font-family: 'Inter', sans-serif;
+      transition: color 0.2s;
+    }
+
+    .search-bar input:focus {
+      color: #fff;
+    }
+
+    .search-bar .search-icon {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin-left: 2px;
+      transition: color 0.2s;
+    }
+
+    .search-bar:focus-within .search-icon {
+      color: #389FFF;
+    }
+
+    .table-scroll {
+      max-height: 480px;
+      overflow-y: auto;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      background: rgba(26, 26, 26, 0.85);
+      transition: background 0.2s;
+    }
+
+    .table-scroll::-webkit-scrollbar {
+      width: 8px;
+      background: #23272e;
+      border-radius: 8px;
+    }
+
+    .table-scroll::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #232e3a 0%, #2a3a4d 100%);
+      border-radius: 8px;
+    }
+
+    .table-scroll {
+      scrollbar-width: thin;
+      scrollbar-color: #2a3a4d #23272e;
+    }
+
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: transparent;
+      border-radius: var(--radius);
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+      padding: 12px 8px;
+      text-align: center;
+      font-size: 1rem;
+      transition: background 0.2s;
+      color: var(--text);
+    }
+
+    .leaderboard-table th {
+      background: var(--orange);
+      color: #fff;
+      font-weight: 700;
+      border-bottom: 2px solid #fff2;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 0.5px;
+    }
+
+    .leaderboard-table tr {
+      transition: background 0.2s, opacity 0.3s;
+      opacity: 0;
+      animation: fadeIn 0.7s forwards;
+    }
+
+    .leaderboard-table tr:hover {
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .rank {
+      font-weight: 700;
+      color: var(--orange);
+      font-size: 1.1rem;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    .medal {
+      font-size: 1.4em;
+      margin-right: 4px;
+      vertical-align: middle;
     }
 
     .no-results {
       text-align: center;
-      padding: 2rem;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--muted);
+      padding: 32px 0 24px 0;
+      font-size: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.8;
     }
 
-    .no-results i {
-      font-size: 2rem;
-      opacity: 0.5;
-      margin-bottom: 1rem;
-    }
-
-    .no-results h3 {
-      margin-bottom: 0.5rem;
-      color: var(--text);
-    }
-
-    .no-results p {
-      font-size: 0.9rem;
-    }
-
-    /* Row animations */
-    .row-appear {
-      animation: slideInRight 0.4s ease-out forwards;
-      opacity: 0;
-      transform: translateX(20px);
-    }
-    
-    @keyframes slideInRight {
-      from {
-        opacity: 0;
-        transform: translateX(20px);
+    /* ======== Responsive ======== */
+    @media (max-width: 768px) {
+      .container {
+        padding: 2rem 1rem;
       }
-      to {
-        opacity: 1;
-        transform: translateX(0);
+      .header h1 {
+        font-size: 2.5rem;
+      }
+      .subtitle {
+        font-size: 1rem;
+      }
+      #table_div th,
+      #table_div td {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+      }
+      .pfp {
+        width: 28px;
+        height: 28px;
+        margin-right: 0.5rem;
+      }
+      #table_div th:nth-child(1),
+      #table_div td:nth-child(1) {
+        width: 3rem;
+      }
+      .leaderboard-table th,
+      .leaderboard-table td {
+        padding: 10px 4px;
+        font-size: 0.98rem;
+      }
+      .search-bar {
+        width: 100%;
+        min-width: 0;
+        position: sticky;
+        top: 0;
+      }
+      .search-bar-wrap {
+        position: sticky;
+        top: 0;
+        background: rgba(26, 26, 26, 0.85);
+        z-index: 10;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+      .subtitle {
+        font-size: 0.9rem;
+      }
+      #search-input {
+        font-size: 0.9rem;
+        padding: 10px 15px 10px 40px;
+      }
+      #table_div th:nth-child(3),
+      #table_div td:nth-child(3) {
+        width: 6rem;
       }
     }
   </style>
 </head>
 <body>
+  <!-- Background and overlay (YAP) -->
   <video class="background-video" autoplay loop muted playsinline>
     <source src="https://sachdev.b-cdn.net/hero-compressed.mp4" type="video/mp4">
   </video>
   <div class="overlay"></div>
-  
+
   <div class="container">
+    <!-- Unified Header -->
     <div class="header">
-      <h1>375ai Leaderboards</h1>
-      <p class="subtitle">Check out top users ranked by their performance scores</p>
+      <h1>375 Leaderboards</h1>
+      <p class="subtitle">Switch between Yap, Gamer, and Scribe leaderboards</p>
     </div>
 
-    <div class="tabs">
-      <div class="tab active" data-tab="yap">YAP Leaderboard</div>
-      <div class="tab" data-tab="gamer">Gamer Leaderboard</div>
-      <div class="tab" data-tab="scribe">Scribe Leaderboard</div>
+    <!-- Category Buttons -->
+    <div class="categories">
+      <button class="category-btn active" data-content="yap">YAP</button>
+      <button class="category-btn" data-content="gamer">GAMER</button>
+      <button class="category-btn" data-content="scribe">SCRIBE</button>
     </div>
 
-    <!-- YAP Leaderboard -->
-    <div class="tab-content active" id="yap-content">
+    <!-- ======== YAP Section ======== -->
+    <div id="yap-section" class="tab-container active">
       <div class="last-updated" id="yap-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="search-container">
         <div class="search-input-wrapper">
@@ -569,8 +763,8 @@
       </div>
     </div>
 
-    <!-- Gamer Leaderboard -->
-    <div class="tab-content" id="gamer-content">
+    <!-- ======== Gamer Section ======== -->
+    <div id="gamer-section" class="tab-container">
       <div class="last-updated" id="gamer-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="legend">
         <div class="legend-item"><span class="swatch gamer1"></span> Gamer I: 0–199 XPs</div>
@@ -588,8 +782,8 @@
       </div>
     </div>
 
-    <!-- Scribe Leaderboard -->
-    <div class="tab-content" id="scribe-content">
+    <!-- ======== Scribe Section ======== -->
+    <div id="scribe-section" class="tab-container">
       <div class="last-updated" id="scribe-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="legend">
         <div class="legend-item"><span class="swatch scribe1"></span> Scribe 1: 0–149 XP</div>
@@ -606,79 +800,87 @@
         <div id="scribe-table"></div>
       </div>
     </div>
-
-    <div class="discord-link">
-      Join our Discord <a href="https://discord.gg/375ai" target="_blank" rel="noopener">here</a>
-    </div>
   </div>
 
   <script>
-    google.charts.load('current', {packages: ['table']});
-    google.charts.setOnLoadCallback(init);
+    // ======== Category Switching Logic ========
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    const yapSection    = document.getElementById('yap-section');
+    const gamerSection  = document.getElementById('gamer-section');
+    const scribeSection = document.getElementById('scribe-section');
 
-    // Global variables
-    let yapData = [];
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const target = btn.dataset.content;
+        if (target === 'yap') {
+          yapSection.classList.add('active');
+          gamerSection.classList.remove('active');
+          scribeSection.classList.remove('active');
+        } else if (target === 'gamer') {
+          yapSection.classList.remove('active');
+          gamerSection.classList.add('active');
+          scribeSection.classList.remove('active');
+        } else if (target === 'scribe') {
+          yapSection.classList.remove('active');
+          gamerSection.classList.remove('active');
+          scribeSection.classList.add('active');
+        }
+      });
+    });
+
+    // ======== YAP, Gamer, Scribe Leaderboards Script ========
+    google.charts.load('current', { packages: ['table'] });
+
+    let yapData   = [];
     let gamerData = [];
-    let scribeData = [];
-    let pfpMap = {};
+    let scribeData= [];
+    let pfpMap    = {};
 
-    function init() {
-      // Initialize all leaderboards
+    google.charts.setOnLoadCallback(initAll);
+
+    function initAll() {
       initYapLeaderboard();
       initGamerLeaderboard();
       initScribeLeaderboard();
-      setupTabSwitching();
     }
 
-    function setupTabSwitching() {
-      document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-          // Remove active class from all tabs and contents
-          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-          
-          // Add active class to clicked tab and corresponding content
-          tab.classList.add('active');
-          document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
-        });
-      });
-    }
-
-    // YAP Leaderboard Functions
+    // ------- YAP Leaderboard -------
     function initYapLeaderboard() {
-      const SHEET_KEY = '1nE4NPgFSHka7ByLLKaHWaVaKARMCrmb-_e1ZvpdV-cE';
-      fetchPFPs(SHEET_KEY).then(pfps => {
-        pfpMap = pfps;
-        loadScores(SHEET_KEY, pfpMap);
+      const KEY = '1nE4NPgFSHka7ByLLKaHWaVaKARMCrmb-_e1ZvpdV-cE';
+      fetchPFPs(KEY).then(map => {
+        pfpMap = map;
+        loadYapScores(KEY);
       });
-
       document.getElementById('yap-search').addEventListener('input', handleYapSearch);
     }
 
-    function loadScores(key, pfpMap) {
-      const q = new google.visualization.Query(
+    function loadYapScores(key) {
+      const scoreQuery = new google.visualization.Query(
         `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Temporary%20LB&headers=1&tq=select%20A%2C%20B%20order%20by%20B%20desc`
       );
-      q.send(res => {
+      scoreQuery.send(res => {
         const dt = res.getDataTable();
         yapData = [];
         for (let i = 0; i < dt.getNumberOfRows(); i++) {
           yapData.push({
             username: dt.getValue(i, 0),
-            points: dt.getValue(i, 1)
+            points:   dt.getValue(i, 1)
           });
         }
         renderYapLeaderboard(yapData);
-        
-        // Fetch timestamp from Meta sheet
+
+        // Fetch timestamp from Meta!A1
         const metaQuery = new google.visualization.Query(
           `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&tq=select%20A`
         );
         metaQuery.send(metaRes => {
           if (!metaRes.isError()) {
-            const metaData = metaRes.getDataTable();
-            if (metaData.getNumberOfRows() > 0) {
-              document.getElementById('yap-updated').textContent = 'Last Updated on ' + metaData.getValue(0, 0);
+            const mDt = metaRes.getDataTable();
+            if (mDt.getNumberOfRows() > 0) {
+              document.getElementById('yap-updated').textContent = 'Last Updated on ' + mDt.getValue(0, 0);
             }
           }
         });
@@ -686,19 +888,20 @@
     }
 
     function handleYapSearch() {
-      const searchTerm = this.value.trim().toLowerCase();
-      const filtered = yapData.filter(user => 
-        user.username.toLowerCase().includes(searchTerm)
-      );
+      const term = this.value.trim().toLowerCase();
+      if (!term) {
+        renderYapLeaderboard(yapData);
+        return;
+      }
+      const filtered = yapData.filter(u => u.username.toLowerCase().includes(term));
       renderYapLeaderboard(filtered);
     }
 
     function renderYapLeaderboard(users) {
-      const tableDiv = document.getElementById('yap-table');
-      tableDiv.innerHTML = '';
-
+      const container = document.getElementById('yap-table');
+      container.innerHTML = '';
       if (users.length === 0) {
-        tableDiv.innerHTML = `
+        container.innerHTML = `
           <div class="no-results">
             <i class="fas fa-search"></i>
             <h3>No users found</h3>
@@ -707,112 +910,92 @@
         `;
         return;
       }
-
       const table = document.createElement('table');
-      
-      // Create header
       const thead = table.createTHead();
-      const headerRow = thead.insertRow();
-      ['#', 'User', 'Points'].forEach(headerText => {
+      const hr = thead.insertRow();
+      ['#', 'User', 'Points'].forEach(text => {
         const th = document.createElement('th');
-        th.textContent = headerText;
-        headerRow.appendChild(th);
+        th.textContent = text;
+        hr.appendChild(th);
       });
-
-      // Create body
       const tbody = table.createTBody();
-      users.slice(0, 50).forEach((user, index) => {
+      users.slice(0, 50).forEach((user, idx) => {
         const row = tbody.insertRow();
-        row.style.opacity = "0";
-        setTimeout(() => {
-          row.classList.add('row-appear');
-        }, index * 50);
-        
-        // Rank
+        row.style.opacity = '0';
+        setTimeout(() => row.classList.add('row-appear'), idx * 50);
+
         const rankCell = row.insertCell();
         rankCell.className = 'rank-cell';
-        if (index === 0) {
-          rankCell.innerHTML = '<span class="rank-1">🥇</span>';
-        } else if (index === 1) {
-          rankCell.innerHTML = '<span class="rank-2">🥈</span>';
-        } else if (index === 2) {
-          rankCell.innerHTML = '<span class="rank-3">🥉</span>';
-        } else {
-          rankCell.innerHTML = `<span class="rank-normal">${index + 1}</span>`;
-        }
+        if (idx === 0)       rankCell.innerHTML = '<span class="rank-1">🥇</span>';
+        else if (idx === 1)  rankCell.innerHTML = '<span class="rank-2">🥈</span>';
+        else if (idx === 2)  rankCell.innerHTML = '<span class="rank-3">🥉</span>';
+        else                 rankCell.innerHTML = `<span class="rank-normal">${idx + 1}</span>`;
 
-        // User with profile picture
         const userCell = row.insertCell();
         userCell.className = 'username-cell';
-        userCell.onclick = () => {
-          window.open(`https://twitter.com/${user.username}`, '_blank');
-        };
-
+        userCell.onclick = () => window.open(`https://twitter.com/${user.username}`, '_blank');
         const img = document.createElement('img');
-        img.src = pfpMap[user.username] || 'https://via.placeholder.com/24';
+        img.src = pfpMap[user.username] || 'https://via.placeholder.com/32';
         img.className = 'pfp';
         img.alt = `${user.username}'s profile`;
-        img.onerror = function() {
-          this.src = 'https://via.placeholder.com/24';
-        };
+        img.onerror = function() { this.src = 'https://via.placeholder.com/32'; };
         userCell.appendChild(img);
+        const uname = document.createElement('span');
+        uname.className = 'username-text';
+        uname.textContent = user.username;
+        userCell.appendChild(uname);
+        const tic = document.createElement('i');
+        tic.className = 'fab fa-twitter twitter-icon';
+        userCell.appendChild(tic);
 
-        const usernameSpan = document.createElement('span');
-        usernameSpan.className = 'username-text';
-        usernameSpan.textContent = user.username;
-        userCell.appendChild(usernameSpan);
-
-        const twitterIcon = document.createElement('i');
-        twitterIcon.className = 'fab fa-twitter twitter-icon';
-        userCell.appendChild(twitterIcon);
-
-        // Points
-        const pointsCell = row.insertCell();
-        pointsCell.className = 'points';
-        pointsCell.textContent = user.points.toFixed(2);
+        const ptsCell = row.insertCell();
+        ptsCell.className = 'points';
+        ptsCell.textContent = user.points.toFixed(2);
       });
-
-      tableDiv.appendChild(table);
+      container.appendChild(table);
     }
 
-    // Gamer Leaderboard Functions
+    // ------- Gamer Leaderboard -------
     function initGamerLeaderboard() {
-      const SHEET_KEY = '1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw';
-      fetchGamerData();
+      const KEY = '1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw';
+      fetchGamerData(KEY);
       document.getElementById('gamer-search').addEventListener('input', handleGamerSearch);
     }
 
-    function fetchGamerData() {
-      const query = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw/gviz/tq?sheet=Leaderboard&tq=select%20A,B'
+    function fetchGamerData(key) {
+      const q = new google.visualization.Query(
+        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Leaderboard&tq=select%20A,B`
       );
-      query.send(function (response) {
-        if (response.isError()) {
-          document.querySelector('#gamer-leaderboard tbody').innerHTML =
-            '<tr><td colspan="4" style="color:var(--faker);text-align:center;">Failed to load leaderboard.</td></tr>';
+      q.send(resp => {
+        if (resp.isError()) {
+          document.getElementById('gamer-table').innerHTML = `
+            <div class="no-results">
+              <i class="fas fa-search"></i>
+              <h3>Failed to load leaderboard.</h3>
+            </div>
+          `;
           return;
         }
-        const dataTable = response.getDataTable();
+        const dt = resp.getDataTable();
         gamerData = [];
-        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
+        for (let i = 0; i < dt.getNumberOfRows(); i++) {
           gamerData.push({
-            username: dataTable.getValue(i, 0),
-            points: parseInt(dataTable.getValue(i, 1), 10),
+            username: dt.getValue(i, 0),
+            points:   parseInt(dt.getValue(i, 1), 10)
           });
         }
-        rankedGamerData = [...gamerData].sort((a, b) => b.points - a.points);
-        rankedGamerData.forEach((row, i) => (row.rank = i + 1));
-        renderGamerLeaderboard(rankedGamerData);
+        gamerData.sort((a, b) => b.points - a.points);
+        renderGamerLeaderboard(gamerData);
 
-        // Fetch timestamp from Meta sheet
-        const metaQuery = new google.visualization.Query(
-          'https://docs.google.com/spreadsheets/d/1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw/gviz/tq?sheet=Meta&tq=select%20A'
+        // Fetch Meta timestamp
+        const metaQ = new google.visualization.Query(
+          `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&tq=select%20A`
         );
-        metaQuery.send(metaRes => {
-          if (!metaRes.isError()) {
-            const metaData = metaRes.getDataTable();
-            if (metaData.getNumberOfRows() > 0) {
-              document.getElementById('gamer-updated').textContent = 'Last Updated on ' + metaData.getValue(0, 0);
+        metaQ.send(mR => {
+          if (!mR.isError()) {
+            const mDt = mR.getDataTable();
+            if (mDt.getNumberOfRows() > 0) {
+              document.getElementById('gamer-updated').textContent = 'Last Updated on ' + mDt.getValue(0, 0);
             }
           }
         });
@@ -820,11 +1003,13 @@
     }
 
     function handleGamerSearch() {
-      const searchTerm = this.value.trim().toLowerCase();
-      const filtered = gamerData.filter(user => 
-        user.username.toLowerCase().includes(searchTerm)
-      );
-      renderGamerLeaderboard(filtered);
+      const term = this.value.trim().toLowerCase();
+      if (!term) {
+        renderGamerLeaderboard(gamerData);
+        return;
+      }
+      const filt = gamerData.filter(u => u.username.toLowerCase().includes(term));
+      renderGamerLeaderboard(filt);
     }
 
     function getGamerTier(points) {
@@ -834,11 +1019,10 @@
     }
 
     function renderGamerLeaderboard(users) {
-      const tableDiv = document.getElementById('gamer-table');
-      tableDiv.innerHTML = '';
-
+      const container = document.getElementById('gamer-table');
+      container.innerHTML = '';
       if (users.length === 0) {
-        tableDiv.innerHTML = `
+        container.innerHTML = `
           <div class="no-results">
             <i class="fas fa-search"></i>
             <h3>No users found</h3>
@@ -847,97 +1031,83 @@
         `;
         return;
       }
-
       const table = document.createElement('table');
-      
-      // Create header
       const thead = table.createTHead();
-      const headerRow = thead.insertRow();
-      ['#', 'Username', 'Total XP', 'Tier'].forEach(headerText => {
+      const hr = thead.insertRow();
+      ['#', 'Username', 'Total XP', 'Tier'].forEach(text => {
         const th = document.createElement('th');
-        th.textContent = headerText;
-        headerRow.appendChild(th);
+        th.textContent = text;
+        hr.appendChild(th);
       });
-
-      // Create body
       const tbody = table.createTBody();
-      users.slice(0, 50).forEach((user, index) => {
+      users.slice(0, 50).forEach((user, idx) => {
         const tier = getGamerTier(user.points);
         const row = tbody.insertRow();
-        row.style.opacity = "0";
-        setTimeout(() => {
-          row.classList.add('row-appear');
-        }, index * 50);
-        
-        // Rank
+        row.style.opacity = '0';
+        setTimeout(() => row.classList.add('row-appear'), idx * 50);
+
         const rankCell = row.insertCell();
         rankCell.className = 'rank-cell';
-        if (index === 0) {
-          rankCell.innerHTML = '<span class="rank-1">🥇</span>';
-        } else if (index === 1) {
-          rankCell.innerHTML = '<span class="rank-2">🥈</span>';
-        } else if (index === 2) {
-          rankCell.innerHTML = '<span class="rank-3">🥉</span>';
-        } else {
-          rankCell.innerHTML = `<span class="rank-normal">${index + 1}</span>`;
-        }
+        if (idx === 0)       rankCell.innerHTML = '<span class="rank-1">🥇</span>';
+        else if (idx === 1)  rankCell.innerHTML = '<span class="rank-2">🥈</span>';
+        else if (idx === 2)  rankCell.innerHTML = '<span class="rank-3">🥉</span>';
+        else                 rankCell.innerHTML = `<span class="rank-normal">${idx + 1}</span>`;
 
-        // Username
         const userCell = row.insertCell();
         userCell.textContent = user.username;
 
-        // Points
-        const pointsCell = row.insertCell();
-        pointsCell.className = 'points';
-        pointsCell.textContent = user.points;
+        const ptsCell = row.insertCell();
+        ptsCell.className = 'points';
+        ptsCell.textContent = user.points;
 
-        // Tier
         const tierCell = row.insertCell();
         tierCell.className = tier.class;
         tierCell.textContent = tier.name;
       });
-
-      tableDiv.appendChild(table);
+      container.appendChild(table);
     }
 
-    // Scribe Leaderboard Functions
+    // ------- Scribe Leaderboard -------
     function initScribeLeaderboard() {
-      const SHEET_KEY = '18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo';
-      fetchScribeData();
+      const KEY = '18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo';
+      fetchScribeData(KEY);
       document.getElementById('scribe-search').addEventListener('input', handleScribeSearch);
     }
 
-    function fetchScribeData() {
-      const query = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B'
+    function fetchScribeData(key) {
+      const q = new google.visualization.Query(
+        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B`
       );
-      query.send(function (response) {
-        if (response.isError()) {
-          document.querySelector('#scribe-leaderboard tbody').innerHTML =
-            '<tr><td colspan="4" style="color:var(--hem);text-align:center;">Failed to load leaderboard.</td></tr>';
+      q.send(resp => {
+        if (resp.isError()) {
+          document.getElementById('scribe-table').innerHTML = `
+            <div class="no-results">
+              <i class="fas fa-search"></i>
+              <h3>Failed to load leaderboard.</h3>
+            </div>
+          `;
           return;
         }
-        const dataTable = response.getDataTable();
+        const dt = resp.getDataTable();
         scribeData = [];
-        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
+        for (let i = 0; i < dt.getNumberOfRows(); i++) {
           scribeData.push({
-            username: dataTable.getValue(i, 0),
-            points: parseInt(dataTable.getValue(i, 1), 10),
+            username: dt.getValue(i, 0),
+            points:   parseInt(dt.getValue(i, 1), 10)
           });
         }
-        rankedScribeData = [...scribeData].sort((a, b) => b.points - a.points);
-        rankedScribeData.forEach((row, i) => (row.rank = i + 1));
-        renderScribeLeaderboard(rankedScribeData);
+        scribeData.sort((a, b) => b.points - a.points);
+        renderScribeLeaderboard(scribeData);
 
-        // Fetch timestamp from Meta sheet
-        const metaQuery = new google.visualization.Query(
-          'https://docs.google.com/spreadsheets/d/18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo/gviz/tq?sheet=Meta&tq=select%20A'
+        // Fetch Meta timestamp
+        const metaQ = new google.visualization.Query(
+          `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&tq=select%20A`
         );
-        metaQuery.send(metaRes => {
-          if (!metaRes.isError()) {
-            const metaData = metaRes.getDataTable();
-            if (metaData.getNumberOfRows() > 0) {
-              document.getElementById('scribe-updated').textContent = 'Last Updated on ' + metaData.getValue(0, 0);
+        metaQ.send(mR => {
+          if (!mR.isError()) {
+            const mDt = mR.getDataTable();
+            if (mDt.getNumberOfRows() > 0) {
+              document.getElementById('scribe-updated').textContent = 'Last Updated on ' + mDt.getValue(0, 0);
             }
           }
         });
@@ -945,11 +1115,13 @@
     }
 
     function handleScribeSearch() {
-      const searchTerm = this.value.trim().toLowerCase();
-      const filtered = scribeData.filter(user => 
-        user.username.toLowerCase().includes(searchTerm)
-      );
-      renderScribeLeaderboard(filtered);
+      const term = this.value.trim().toLowerCase();
+      if (!term) {
+        renderScribeLeaderboard(scribeData);
+        return;
+      }
+      const filt = scribeData.filter(u => u.username.toLowerCase().includes(term));
+      renderScribeLeaderboard(filt);
     }
 
     function getScribeTier(points) {
@@ -959,11 +1131,10 @@
     }
 
     function renderScribeLeaderboard(users) {
-      const tableDiv = document.getElementById('scribe-table');
-      tableDiv.innerHTML = '';
-
+      const container = document.getElementById('scribe-table');
+      container.innerHTML = '';
       if (users.length === 0) {
-        tableDiv.innerHTML = `
+        container.innerHTML = `
           <div class="no-results">
             <i class="fas fa-search"></i>
             <h3>No users found</h3>
@@ -972,57 +1143,40 @@
         `;
         return;
       }
-
       const table = document.createElement('table');
-      
-      // Create header
       const thead = table.createTHead();
-      const headerRow = thead.insertRow();
-      ['#', 'Username', 'Total Points', 'Tier'].forEach(headerText => {
+      const hr = thead.insertRow();
+      ['#', 'Username', 'Total Points', 'Tier'].forEach(text => {
         const th = document.createElement('th');
-        th.textContent = headerText;
-        headerRow.appendChild(th);
+        th.textContent = text;
+        hr.appendChild(th);
       });
-
-      // Create body
       const tbody = table.createTBody();
-      users.slice(0, 50).forEach((user, index) => {
+      users.slice(0, 50).forEach((user, idx) => {
         const tier = getScribeTier(user.points);
         const row = tbody.insertRow();
-        row.style.opacity = "0";
-        setTimeout(() => {
-          row.classList.add('row-appear');
-        }, index * 50);
-        
-        // Rank
+        row.style.opacity = '0';
+        setTimeout(() => row.classList.add('row-appear'), idx * 50);
+
         const rankCell = row.insertCell();
         rankCell.className = 'rank-cell';
-        if (index === 0) {
-          rankCell.innerHTML = '<span class="rank-1">🥇</span>';
-        } else if (index === 1) {
-          rankCell.innerHTML = '<span class="rank-2">🥈</span>';
-        } else if (index === 2) {
-          rankCell.innerHTML = '<span class="rank-3">🥉</span>';
-        } else {
-          rankCell.innerHTML = `<span class="rank-normal">${index + 1}</span>`;
-        }
+        if (idx === 0)       rankCell.innerHTML = '<span class="rank-1">🥇</span>';
+        else if (idx === 1)  rankCell.innerHTML = '<span class="rank-2">🥈</span>';
+        else if (idx === 2)  rankCell.innerHTML = '<span class="rank-3">🥉</span>';
+        else                 rankCell.innerHTML = `<span class="rank-normal">${idx + 1}</span>`;
 
-        // Username
         const userCell = row.insertCell();
         userCell.textContent = user.username;
 
-        // Points
-        const pointsCell = row.insertCell();
-        pointsCell.className = 'points';
-        pointsCell.textContent = user.points;
+        const ptsCell = row.insertCell();
+        ptsCell.className = 'points';
+        ptsCell.textContent = user.points;
 
-        // Tier
         const tierCell = row.insertCell();
         tierCell.className = tier.class;
         tierCell.textContent = tier.name;
       });
-
-      tableDiv.appendChild(table);
+      container.appendChild(table);
     }
 
     function fetchPFPs(key) {
@@ -1041,4 +1195,4 @@
     }
   </script>
 </body>
-</html> 
+</html>
