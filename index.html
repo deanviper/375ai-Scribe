@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>375ai Leaderboards</title>
+  <title>375 Multi Leaderboards</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <!-- Google Fonts - Inter for Yap, Oswald for Gamer/Scribe -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
@@ -25,6 +25,7 @@
       --radius: 16px;
       --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
       --muted: rgba(255, 255, 255, 0.5);
+      --small-text: 0.9rem;
     }
 
     * {
@@ -75,7 +76,7 @@
 
     .header {
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       animation: fadeInDown 0.8s ease-out;
     }
 
@@ -107,7 +108,7 @@
       color: rgba(255, 255, 255, 0.8);
       font-size: 1.1rem;
       max-width: 600px;
-      margin: 0 auto;
+      margin: 0 auto 1rem;
       animation: fadeInUp 1s ease-out 0.5s both;
     }
 
@@ -127,7 +128,7 @@
       display: flex;
       justify-content: center;
       gap: 1rem;
-      margin: 2rem 0 1.5rem;
+      margin: 1.5rem 0;
       animation: fadeIn 1s ease-out 0.7s both;
     }
 
@@ -165,7 +166,7 @@
 
     /* ======== YAP Leaderboard Styles ======== */
     .search-container {
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
       display: flex;
       justify-content: center;
       position: relative;
@@ -228,6 +229,14 @@
       color: var(--orange);
     }
 
+    .last-updated {
+      text-align: center;
+      font-size: var(--small-text);
+      color: var(--muted);
+      margin-bottom: 1rem;
+      animation: fadeIn 1s ease-out both;
+    }
+
     .dashboard {
       display: flex;
       justify-content: center;
@@ -274,7 +283,7 @@
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
-      color: var(--text); /* ensure text is white */
+      color: var(--text);
     }
 
     #table_div th,
@@ -284,7 +293,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: var(--text); /* force white text */
+      color: var(--text);
     }
 
     #table_div thead {
@@ -459,12 +468,6 @@
 
     .username-cell:hover .twitter-icon {
       color: #1DA1F2;
-    }
-
-    /* Force each YAP row to be fully visible (override any failed animation) */
-    #table_div tbody tr {
-      opacity: 1 !important;
-      transform: none !important;
     }
 
     /* ======== Gamer & Scribe Styles ======== */
@@ -741,13 +744,14 @@
 
     <!-- Category Buttons -->
     <div class="categories">
-      <button class="category-btn active" data-content="yap">YAP Leaderboard</button>
-      <button class="category-btn" data-content="gamer">Gamer Leaderboard</button>
-      <button class="category-btn" data-content="scribe">Scribe Leaderboard</button>
+      <button class="category-btn active" data-content="yap">YAP</button>
+      <button class="category-btn" data-content="gamer">GAMER</button>
+      <button class="category-btn" data-content="scribe">SCRIBE</button>
     </div>
 
-    <!-- ======== YAP Section (unchanged logic) ======== -->
+    <!-- ======== YAP Section ======== -->
     <div id="yap-section" class="tab-container active">
+      <div class="last-updated" id="yap-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="search-container">
         <div class="search-input-wrapper">
           <i class="fas fa-search search-icon"></i>
@@ -771,6 +775,7 @@
 
     <!-- ======== Gamer Section ======== -->
     <div id="gamer-section" class="tab-container">
+      <div class="last-updated" id="gamer-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="legend">
         <div class="legend-item"><span class="swatch gamer1"></span> Gamer I: 0–199 XPs</div>
         <div class="legend-item"><span class="swatch gamer2"></span> Gamer II: 200–399 XPs</div>
@@ -803,6 +808,7 @@
 
     <!-- ======== Scribe Section ======== -->
     <div id="scribe-section" class="tab-container">
+      <div class="last-updated" id="scribe-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="legend">
         <div class="legend-item"><span class="swatch scribe1"></span> Scribe 1: 0–149 XP</div>
         <div class="legend-item"><span class="swatch scribe2"></span> Scribe 2: 150–399 XP</div>
@@ -835,6 +841,16 @@
   </div>
 
   <script>
+    // ======== Utility to format UTC timestamp ========
+    function getUTCStamp() {
+      const d = new Date();
+      const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+      const dd = String(d.getUTCDate()).padStart(2, '0');
+      const hh = String(d.getUTCHours()).padStart(2, '0');
+      const mi = String(d.getUTCMinutes()).padStart(2, '0');
+      return `${mm}/${dd} - ${hh}:${mi} UTC`;
+    }
+
     // ======== Category Switching Logic ========
     const categoryBtns = document.querySelectorAll('.category-btn');
     const yapSection = document.getElementById('yap-section');
@@ -863,25 +879,25 @@
       });
     });
 
-    // ======== YAP Leaderboard Script (unchanged) ========
+    // ======== YAP Leaderboard Script ========
     google.charts.load('current', { packages: ['table'] });
 
     let allUsers = [];
     let pfpMap = {};
     let isSearchView = false;
 
-    google.charts.setOnLoadCallback(init);
+    google.charts.setOnLoadCallback(initYAP);
 
-    function init() {
+    function initYAP() {
       const SHEET_KEY = '1nE4NPgFSHka7ByLLKaHWaVaKARMCrmb-_e1ZvpdV-cE';
       fetchPFPs(SHEET_KEY).then(pfps => {
         pfpMap = pfps;
         loadScores(SHEET_KEY, pfpMap);
       });
-      setupEventListeners();
+      setupYAPEventListeners();
     }
 
-    function setupEventListeners() {
+    function setupYAPEventListeners() {
       const searchInput = document.getElementById('search-input');
       const clearSearchBtn = document.getElementById('clear-search');
       const backButton = document.getElementById('back-button');
@@ -893,7 +909,7 @@
       });
 
       backButton.addEventListener('click', () => {
-        renderLeaderboard(allUsers, pfpMap);
+        renderLeaderboard(allUsers.slice(0, 50), pfpMap);
         backButton.style.display = 'none';
         isSearchView = false;
       });
@@ -927,7 +943,11 @@
             points: dt.getValue(i, 1)
           });
         }
-        renderLeaderboard(allUsers, pfpMap);
+        // Show top 50 by default
+        renderLeaderboard(allUsers.slice(0, 50), pfpMap);
+        document.getElementById('back-button').style.display = 'none';
+        // Update timestamp
+        document.getElementById('yap-updated').textContent = 'Last Updated on ' + getUTCStamp();
       });
     }
 
@@ -961,6 +981,7 @@
 
       users.forEach((user, index) => {
         const row = tbody.insertRow();
+        row.style.opacity = '1'; // ensure visible
 
         const rankCell = row.insertCell();
         if (isSearchView) {
@@ -1183,6 +1204,7 @@
         rankedGamerData = [...gamerData].sort((a, b) => b.points - a.points);
         rankedGamerData.forEach((row, i) => (row.rank = i + 1));
         renderGamerLeaderboard(rankedGamerData);
+        document.getElementById('gamer-updated').textContent = 'Last Updated on ' + getUTCStamp();
       });
     }
 
@@ -1207,6 +1229,7 @@
         rankedScribeData = [...scribeData].sort((a, b) => b.points - a.points);
         rankedScribeData.forEach((row, i) => (row.rank = i + 1));
         renderScribeLeaderboard(rankedScribeData);
+        document.getElementById('scribe-updated').textContent = 'Last Updated on ' + getUTCStamp();
       });
     }
 
