@@ -869,13 +869,13 @@
       });
     });
 
-    // ======== YAP, Gamer, Scribe Leaderboards Script ========
+    // ======== Leaderboards Script ========
     google.charts.load('current', { packages: ['table'] });
 
-    let allUsers   = [];
-    let gamerData  = [];
-    let scribeData = [];
-    let pfpMap     = {};
+    let allUsers    = [];
+    let gamerData   = [];
+    let scribeData  = [];
+    let pfpMap      = {};
 
     google.charts.setOnLoadCallback(initAll);
 
@@ -893,6 +893,7 @@
         loadYAPScores(KEY);
       });
       document.getElementById('search-input').addEventListener('input', handleYAPSearch);
+      document.getElementById('clear-search').addEventListener('click', clearYAPSearch);
     }
 
     function loadYAPScores(key) {
@@ -909,6 +910,9 @@
           });
         }
         renderYAPLeaderboard(allUsers);
+
+        // Hide back button
+        document.getElementById('back-button').style.display = 'none';
 
         // Fetch timestamp from Meta!A1
         const metaQuery = new google.visualization.Query(
@@ -930,10 +934,19 @@
       const term = this.value.trim().toLowerCase();
       if (!term) {
         renderYAPLeaderboard(allUsers);
+        document.getElementById('back-button').style.display = 'none';
         return;
       }
       const filtered = allUsers.filter(u => u.username.toLowerCase().includes(term));
       renderYAPLeaderboard(filtered);
+      document.getElementById('back-button').style.display = 'block';
+    }
+
+    function clearYAPSearch() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('clear-search').style.display = 'none';
+      renderYAPLeaderboard(allUsers);
+      document.getElementById('back-button').style.display = 'none';
     }
 
     function renderYAPLeaderboard(users) {
@@ -960,7 +973,7 @@
       const tbody = table.createTBody();
       users.slice(0, 50).forEach((user, idx) => {
         const row = tbody.insertRow();
-        row.style.opacity = '1'; // no animation delay here since original code used getUTCStamp
+        row.style.opacity = '1';
 
         const rankCell = row.insertCell();
         if (idx === 0) {
@@ -1007,11 +1020,10 @@
         pointsCell.className = 'points';
         pointsCell.textContent = user.points.toFixed(2);
 
-        row.insertCell(); // empty cell for spacing
+        row.insertCell(); // empty column
       });
       container.appendChild(table);
     }
-
 
     function fetchPFPs(key) {
       return new Promise(resolve => {
@@ -1027,7 +1039,6 @@
         });
       });
     }
-
 
     // ------- Gamer Leaderboard -------
     function initGamerLeaderboard() {
@@ -1055,9 +1066,8 @@
             points:   parseInt(dt.getValue(i, 1), 10)
           });
         }
-        // Sort descending
         gamerData.sort((a, b) => b.points - a.points);
-        renderGamerLeaderboard(gamerData);
+        renderGamerLeaderboard(gamerData, false);
 
         // Fetch timestamp from Meta!A1
         const metaQ = new google.visualization.Query(
@@ -1078,11 +1088,11 @@
     function handleGamerSearch() {
       const term = this.value.trim().toLowerCase();
       if (!term) {
-        renderGamerLeaderboard(gamerData);
+        renderGamerLeaderboard(gamerData, false);
         return;
       }
-      const filt = gamerData.filter(u => u.username.toLowerCase().includes(term));
-      renderGamerLeaderboard(filt);
+      const filtered = gamerData.filter(u => u.username.toLowerCase().includes(term));
+      renderGamerLeaderboard(filtered, true);
     }
 
     function getGamerTier(points) {
@@ -1091,53 +1101,43 @@
       return { name: 'Gamer I', class: 'gamer1-bg' };
     }
 
-    function renderGamerLeaderboard(users) {
-      const container = document.getElementById('gamer-table');
-      container.innerHTML = '';
+    function renderGamerLeaderboard(users, showTrueRank) {
+      const tbody = document.querySelector('#gamer-leaderboard tbody');
+      tbody.innerHTML = '';
       if (users.length === 0) {
-        container.innerHTML = `
-          <div class="no-results">
-            <i class="fas fa-search"></i>
-            <h3>No users found</h3>
-            <p>Try searching with a different username</p>
-          </div>
-        `;
+        tbody.innerHTML = `
+          <tr><td colspan="4" class="no-results">
+            <div class="no-results-icon">🔍</div>
+            No results
+          </td></tr>`;
         return;
       }
-      const table = document.createElement('table');
-      const thead = table.createTHead();
-      const hr = thead.insertRow();
-      ['#', 'Username', 'Total XP', 'Tier'].forEach(text => {
-        const th = document.createElement('th');
-        th.textContent = text;
-        hr.appendChild(th);
+      users.forEach((rowData, idx) => {
+        const tier = getGamerTier(rowData.points);
+        let rankDisplay = '';
+        if (showTrueRank) {
+          const trueRank = gamerData.findIndex(
+            r => r.username === rowData.username && r.points === rowData.points
+          ) + 1;
+          if (trueRank === 1) rankDisplay = '<span class="medal">🥇</span>';
+          else if (trueRank === 2) rankDisplay = '<span class="medal">🥈</span>';
+          else if (trueRank === 3) rankDisplay = '<span class="medal">🥉</span>';
+          else rankDisplay = trueRank;
+        } else {
+          if (idx === 0) rankDisplay = '<span class="medal">🥇</span>';
+          else if (idx === 1) rankDisplay = '<span class="medal">🥈</span>';
+          else if (idx === 2) rankDisplay = '<span class="medal">🥉</span>';
+          else rankDisplay = idx + 1;
+        }
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="rank">${rankDisplay}</td>
+          <td>${rowData.username}</td>
+          <td>${rowData.points}</td>
+          <td class="${tier.class}">${tier.name}</td>
+        `;
+        tbody.appendChild(tr);
       });
-      const tbody = table.createTBody();
-      users.slice(0, 50).forEach((user, idx) => {
-        const tier = getGamerTier(user.points);
-        const row = tbody.insertRow();
-        row.style.opacity = '0';
-        setTimeout(() => row.classList.add('row-appear'), idx * 50);
-
-        const rankCell = row.insertCell();
-        rankCell.className = 'rank';
-        if (idx === 0)       rankCell.innerHTML = '<span class="medal">🥇</span>';
-        else if (idx === 1)  rankCell.innerHTML = '<span class="medal">🥈</span>';
-        else if (idx === 2)  rankCell.innerHTML = '<span class="medal">🥉</span>';
-        else                 rankCell.textContent = (idx + 1).toString();
-
-        const userCell = row.insertCell();
-        userCell.textContent = user.username;
-
-        const ptsCell = row.insertCell();
-        ptsCell.className = 'points';
-        ptsCell.textContent = user.points;
-
-        const tierCell = row.insertCell();
-        tierCell.className = tier.class;
-        tierCell.textContent = tier.name;
-      });
-      container.appendChild(table);
     }
 
     // ------- Scribe Leaderboard -------
@@ -1167,7 +1167,7 @@
           });
         }
         scribeData.sort((a, b) => b.points - a.points);
-        renderScribeLeaderboard(scribeData);
+        renderScribeLeaderboard(scribeData, false);
 
         // Fetch timestamp from Meta!A1
         const metaQ = new google.visualization.Query(
@@ -1188,11 +1188,11 @@
     function handleScribeSearch() {
       const term = this.value.trim().toLowerCase();
       if (!term) {
-        renderScribeLeaderboard(scribeData);
+        renderScribeLeaderboard(scribeData, false);
         return;
       }
-      const filt = scribeData.filter(u => u.username.toLowerCase().includes(term));
-      renderScribeLeaderboard(filt);
+      const filtered = scribeData.filter(u => u.username.toLowerCase().includes(term));
+      renderScribeLeaderboard(filtered, true);
     }
 
     function getScribeTier(points) {
@@ -1201,53 +1201,43 @@
       return { name: 'Scribe 1', class: 'scribe1-bg' };
     }
 
-    function renderScribeLeaderboard(users) {
-      const container = document.getElementById('scribe-table');
-      container.innerHTML = '';
+    function renderScribeLeaderboard(users, showTrueRank) {
+      const tbody = document.querySelector('#scribe-leaderboard tbody');
+      tbody.innerHTML = '';
       if (users.length === 0) {
-        container.innerHTML = `
-          <div class="no-results">
-            <i class="fas fa-search"></i>
-            <h3>No users found</h3>
-            <p>Try searching with a different username</p>
-          </div>
-        `;
+        tbody.innerHTML = `
+          <tr><td colspan="4" class="no-results">
+            <div class="no-results-icon">🔍</div>
+            No results
+          </td></tr>`;
         return;
       }
-      const table = document.createElement('table');
-      const thead = table.createTHead();
-      const hr = thead.insertRow();
-      ['#', 'Username', 'Total Points', 'Tier'].forEach(text => {
-        const th = document.createElement('th');
-        th.textContent = text;
-        hr.appendChild(th);
+      users.forEach((rowData, idx) => {
+        const tier = getScribeTier(rowData.points);
+        let rankDisplay = '';
+        if (showTrueRank) {
+          const trueRank = scribeData.findIndex(
+            r => r.username === rowData.username && r.points === rowData.points
+          ) + 1;
+          if (trueRank === 1) rankDisplay = '<span class="medal">🥇</span>';
+          else if (trueRank === 2) rankDisplay = '<span class="medal">🥈</span>';
+          else if (trueRank === 3) rankDisplay = '<span class="medal">🥉</span>';
+          else rankDisplay = trueRank;
+        } else {
+          if (idx === 0) rankDisplay = '<span class="medal">🥇</span>';
+          else if (idx === 1) rankDisplay = '<span class="medal">🥈</span>';
+          else if (idx === 2) rankDisplay = '<span class="medal">🥉</span>';
+          else rankDisplay = idx + 1;
+        }
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="rank">${rankDisplay}</td>
+          <td>${rowData.username}</td>
+          <td>${rowData.points}</td>
+          <td class="${tier.class}">${tier.name}</td>
+        `;
+        tbody.appendChild(tr);
       });
-      const tbody = table.createTBody();
-      users.slice(0, 50).forEach((user, idx) => {
-        const tier = getScribeTier(user.points);
-        const row = tbody.insertRow();
-        row.style.opacity = '0';
-        setTimeout(() => row.classList.add('row-appear'), idx * 50);
-
-        const rankCell = row.insertCell();
-        rankCell.className = 'rank';
-        if (idx === 0)       rankCell.innerHTML = '<span class="medal">🥇</span>';
-        else if (idx === 1)  rankCell.innerHTML = '<span class="medal">🥈</span>';
-        else if (idx === 2)  rankCell.innerHTML = '<span class="medal">🥉</span>';
-        else                 rankCell.textContent = (idx + 1).toString();
-
-        const userCell = row.insertCell();
-        userCell.textContent = user.username;
-
-        const ptsCell = row.insertCell();
-        ptsCell.className = 'points';
-        ptsCell.textContent = user.points;
-
-        const tierCell = row.insertCell();
-        tierCell.className = tier.class;
-        tierCell.textContent = tier.name;
-      });
-      container.appendChild(table);
     }
   </script>
 </body>
