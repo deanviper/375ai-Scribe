@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>375 Multi Leaderboards</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <!-- Google Fonts - Inter for all headers, Oswald removed from table headers -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts - Inter for Yap, Oswald for Gamer/Scribe -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
   <!-- Google Charts loader -->
   <script src="https://www.gstatic.com/charts/loader.js"></script>
   <!-- Font Awesome for icons -->
@@ -235,8 +235,6 @@
       color: var(--muted);
       margin-bottom: 1rem;
       animation: fadeIn 1s ease-out both;
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
     }
 
     .dashboard {
@@ -296,8 +294,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       color: var(--text);
-      font-family: 'Inter', sans-serif;      /* standardized font */
-      font-weight: 600;                       /* bold header text */
     }
 
     #table_div thead {
@@ -309,6 +305,7 @@
     }
 
     #table_div th {
+      font-weight: 600;
       text-align: left;
       letter-spacing: 0.5px;
     }
@@ -620,17 +617,17 @@
       font-size: 1rem;
       transition: background 0.2s;
       color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-weight: 600; /* bold header and cell text consistency */
     }
 
     .leaderboard-table th {
       background: var(--orange);
       color: #fff;
+      font-weight: 700;
       border-bottom: 2px solid #fff2;
       position: sticky;
       top: 0;
       z-index: 1;
+      font-family: 'Oswald', sans-serif;
       letter-spacing: 0.5px;
     }
 
@@ -648,6 +645,7 @@
       font-weight: 700;
       color: var(--orange);
       font-size: 1.1rem;
+      font-family: 'Oswald', sans-serif;
     }
 
     .medal {
@@ -731,7 +729,7 @@
   </style>
 </head>
 <body>
-  <!-- Background and overlay for YAP -->
+  <!-- Background and overlay (YAP) -->
   <video class="background-video" autoplay loop muted playsinline>
     <source src="https://sachdev.b-cdn.net/hero-compressed.mp4" type="video/mp4">
   </video>
@@ -754,7 +752,6 @@
     <!-- ======== YAP Section ======== -->
     <div id="yap-section" class="tab-container active">
       <div class="last-updated" id="yap-updated">Last Updated on --/-- - --:-- UTC</div>
-
       <div class="search-container">
         <div class="search-input-wrapper">
           <i class="fas fa-search search-icon"></i>
@@ -784,19 +781,29 @@
         <div class="legend-item"><span class="swatch gamer2"></span> Gamer II: 200–399 XPs</div>
         <div class="legend-item"><span class="swatch faker"></span> FAKER: 400+ XPs</div>
       </div>
-      <div class="search-container">
-        <div class="search-input-wrapper">
-          <i class="fas fa-search search-icon"></i>
-          <input id="gamer-search-input" type="text" placeholder="Search for username..." autocomplete="off" />
-          <button id="gamer-clear-search"><i class="fas fa-times"></i></button>
-        </div>
+      <div class="search-bar-wrap">
+        <form class="search-bar" onsubmit="return false;">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <path d="M14.32 13.1l3.58 3.59a1 1 0 01-1.42 1.42l-3.59-3.58a7 7 0 111.43-1.43zM9 15a6 6 0 100-12 6 6 0 000 12z" fill="currentColor"/>
+          </svg>
+          <input id="gamer-search" type="text" placeholder="Search username..." autocomplete="off" />
+        </form>
       </div>
-      <div class="table-wrapper">
-        <div id="gamer_table_div"></div>
+      <div class="table-scroll">
+        <table class="leaderboard-table" id="gamer-leaderboard">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Total XP</th>
+              <th>Tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" style="text-align:center;color:var(--muted);">Loading...</td></tr>
+          </tbody>
+        </table>
       </div>
-      <button id="gamer-back-button" class="back-button">
-        <i class="fas fa-arrow-left"></i> Back to Leaderboard
-      </button>
     </div>
 
     <!-- ======== Scribe Section ======== -->
@@ -807,33 +814,33 @@
         <div class="legend-item"><span class="swatch scribe2"></span> Scribe 2: 150–399 XP</div>
         <div class="legend-item"><span class="swatch hem"></span> HEMMINGWAY: 400+ XP</div>
       </div>
-      <div class="search-container">
-        <div class="search-input-wrapper">
-          <i class="fas fa-search search-icon"></i>
-          <input id="scribe-search-input" type="text" placeholder="Search for username..." autocomplete="off" />
-          <button id="scribe-clear-search"><i class="fas fa-times"></i></button>
-        </div>
+      <div class="search-bar-wrap">
+        <form class="search-bar" onsubmit="return false;">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <path d="M14.32 13.1l3.58 3.59a1 1 0 01-1.42 1.42l-3.59-3.58a7 7 0 111.43-1.43zM9 15a6 6 0 100-12 6 6 0 000 12z" fill="currentColor"/>
+          </svg>
+          <input id="scribe-search" type="text" placeholder="Search username..." autocomplete="off" />
+        </form>
       </div>
-      <div class="table-wrapper">
-        <div id="scribe_table_div"></div>
+      <div class="table-scroll">
+        <table class="leaderboard-table" id="scribe-leaderboard">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Total Points</th>
+              <th>Tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" style="text-align:center;color:var(--muted);">Loading...</td></tr>
+          </tbody>
+        </table>
       </div>
-      <button id="scribe-back-button" class="back-button">
-        <i class="fas fa-arrow-left"></i> Back to Leaderboard
-      </button>
     </div>
   </div>
 
   <script>
-    // ======== Utility to format UTC timestamp ========
-    function getUTCStamp() {
-      const d = new Date();
-      const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
-      const dd = String(d.getUTCDate()).padStart(2, '0');
-      const hh = String(d.getUTCHours()).padStart(2, '0');
-      const mi = String(d.getUTCMinutes()).padStart(2, '0');
-      return `${mm}/${dd} - ${hh}:${mi} UTC`;
-    }
-
     // ======== Category Switching Logic ========
     const categoryBtns = document.querySelectorAll('.category-btn');
     const yapSection = document.getElementById('yap-section');
@@ -875,7 +882,7 @@
       const SHEET_KEY = '1nE4NPgFSHka7ByLLKaHWaVaKARMCrmb-_e1ZvpdV-cE';
       fetchPFPs(SHEET_KEY).then(pfps => {
         pfpMap = pfps;
-        loadYAPScores(SHEET_KEY, pfpMap);
+        loadScores(SHEET_KEY, pfpMap);
       });
       setupYAPEventListeners();
     }
@@ -885,18 +892,14 @@
       const clearSearchBtn = document.getElementById('clear-search');
       const backButton = document.getElementById('back-button');
 
-      searchInput.addEventListener('input', handleYAPSearch);
-      clearSearchBtn.addEventListener('click', () => {
-        searchInput.value = '';
-        clearSearchBtn.style.display = 'none';
-        handleYAPSearch();
-      });
+      searchInput.addEventListener('input', handleSearch);
+      clearSearchBtn.addEventListener('click', clearSearch);
       searchInput.addEventListener('input', () => {
         clearSearchBtn.style.display = searchInput.value ? 'block' : 'none';
       });
 
       backButton.addEventListener('click', () => {
-        renderYAPLeaderboard(allUsers.slice(0, 50), pfpMap);
+        renderLeaderboard(allUsers.slice(0, 50), pfpMap);
         backButton.style.display = 'none';
         isSearchView = false;
       });
@@ -917,7 +920,7 @@
       });
     }
 
-    function loadYAPScores(key, pfpMap) {
+    function loadScores(key, pfpMap) {
       const q = new google.visualization.Query(
         `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Temporary%20LB&headers=1&tq=select%20A%2C%20B%20order%20by%20B%20desc`
       );
@@ -931,14 +934,22 @@
           });
         }
         // Show top 50 by default
-        renderYAPLeaderboard(allUsers.slice(0, 50), pfpMap);
+        renderLeaderboard(allUsers.slice(0, 50), pfpMap);
         document.getElementById('back-button').style.display = 'none';
-        // Update timestamp
-        document.getElementById('yap-updated').textContent = 'Last Updated on ' + getUTCStamp();
+
+        // Fetch actual timestamp from Meta!A1
+        const metaQuery = new google.visualization.Query(
+          `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&headers=1&tq=select%20A%20limit%201`
+        );
+        metaQuery.send(r => {
+          const dt2 = r.getDataTable();
+          const ts = dt2.getValue(0, 0);
+          document.getElementById('yap-updated').textContent = ts;
+        });
       });
     }
 
-    function renderYAPLeaderboard(users, pfpMap, searchTerm = '') {
+    function renderLeaderboard(users, pfpMap, searchTerm = '') {
       const tableDiv = document.getElementById('table_div');
       tableDiv.innerHTML = '';
 
@@ -958,8 +969,7 @@
       const thead = table.createTHead();
       const headerRow = thead.insertRow();
 
-      // Use "#", "Username", "Points", ""
-      ['#', 'Username', 'Points', ''].forEach(headerText => {
+      ['#', 'User', 'Points', ''].forEach(headerText => {
         const th = document.createElement('th');
         th.textContent = headerText;
         headerRow.appendChild(th);
@@ -969,10 +979,7 @@
 
       users.forEach((user, index) => {
         const row = tbody.insertRow();
-        row.style.opacity = '0';
-        setTimeout(() => {
-          row.classList.add('row-appear');
-        }, index * 50);
+        row.style.opacity = '1'; // ensure visible
 
         const rankCell = row.insertCell();
         if (isSearchView) {
@@ -1036,12 +1043,12 @@
       tableDiv.appendChild(table);
     }
 
-    function handleYAPSearch() {
+    function handleSearch() {
       const searchInput = document.getElementById('search-input');
       const searchTerm = searchInput.value.trim().toLowerCase();
 
       if (searchTerm === '') {
-        renderYAPLeaderboard(allUsers.slice(0, 50), pfpMap);
+        renderLeaderboard(allUsers.slice(0, 50), pfpMap);
         document.getElementById('back-button').style.display = 'none';
         isSearchView = false;
         return;
@@ -1052,10 +1059,18 @@
       );
 
       const resultsToShow = filteredUsers.slice(0, 20);
-      renderYAPLeaderboard(resultsToShow, pfpMap, searchTerm);
+      renderLeaderboard(resultsToShow, pfpMap, searchTerm);
 
       document.getElementById('back-button').style.display = 'block';
       isSearchView = true;
+    }
+
+    function clearSearch() {
+      document.getElementById('search-input').value = '';
+      document.getElementById('clear-search').style.display = 'none';
+      renderLeaderboard(allUsers.slice(0, 50), pfpMap);
+      document.getElementById('back-button').style.display = 'none';
+      isSearchView = false;
     }
 
     function showToast(message) {
@@ -1072,120 +1087,11 @@
       }, 3000);
     }
 
-    // ======== Gamer Leaderboard Script ========
-    function renderGamerLeaderboard(data, showTrueRank = false, searchTerm = '') {
-      const container = document.getElementById('gamer_table_div');
-      container.innerHTML = '';
-
-      if (data.length === 0) {
-        const noResults = document.createElement('div');
-        noResults.className = 'no-results';
-        noResults.innerHTML = `
-          <i class="fas fa-search" style="font-size: 2rem; opacity: 0.5; margin-bottom: 1rem;"></i>
-          <h3>No users found</h3>
-          <p>Try searching with a different username</p>
-        `;
-        container.appendChild(noResults);
-        return;
-      }
-
-      const table = document.createElement('table');
-      table.className = 'leaderboard-table';
-      const thead = document.createElement('thead');
-      const headerRow = document.createElement('tr');
-      ['#', 'Username', 'Points', 'Tier'].forEach(text => {
-        const th = document.createElement('th');
-        th.textContent = text;
-        headerRow.appendChild(th);
-      });
-      thead.appendChild(headerRow);
-      table.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-      table.appendChild(tbody);
-
-      data.forEach((rowData, i) => {
-        const tr = document.createElement('tr');
-        tr.style.opacity = '0';
-        setTimeout(() => {
-          tr.classList.add('row-appear');
-        }, i * 50);
-
-        const tier = getGamerTier(rowData.points);
-        let rankDisplay = '';
-        if (showTrueRank) {
-          const trueRank = rankedGamerData.findIndex(
-            r => r.username === rowData.username && r.points === rowData.points
-          ) + 1;
-          if (trueRank === 1) rankDisplay = '<span class="medal">🥇</span>';
-          else if (trueRank === 2) rankDisplay = '<span class="medal">🥈</span>';
-          else if (trueRank === 3) rankDisplay = '<span class="medal">🥉</span>';
-          else rankDisplay = trueRank;
-        } else {
-          if (i === 0) rankDisplay = '<span class="medal">🥇</span>';
-          else if (i === 1) rankDisplay = '<span class="medal">🥈</span>';
-          else if (i === 2) rankDisplay = '<span class="medal">🥉</span>';
-          else rankDisplay = i + 1;
-        }
-
-        const tdRank = document.createElement('td');
-        tdRank.className = 'rank';
-        tdRank.innerHTML = rankDisplay;
-        tr.appendChild(tdRank);
-
-        const tdUser = document.createElement('td');
-        tdUser.textContent = rowData.username;
-        tr.appendChild(tdUser);
-
-        const tdPoints = document.createElement('td');
-        tdPoints.textContent = rowData.points;
-        tr.appendChild(tdPoints);
-
-        const tdTier = document.createElement('td');
-        tdTier.className = tier.class;
-        tdTier.textContent = tier.name;
-        tr.appendChild(tdTier);
-
-        if (searchTerm && !rowData.username.toLowerCase().includes(searchTerm.toLowerCase())) {
-          tr.classList.add('hidden-row');
-        }
-        tbody.appendChild(tr);
-      });
-
-      container.appendChild(table);
-    }
-
+    // ======== Gamer & Scribe Leaderboards Script ========
     let gamerData = [];
     let rankedGamerData = [];
-    let isGamerSearchView = false;
-
-    function fetchGamerData() {
-      const query = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw/gviz/tq?sheet=Leaderboard&tq=select%20A,B'
-      );
-      query.send(function(response) {
-        if (response.isError()) {
-          document.getElementById('gamer_table_div').innerHTML =
-            '<div class="no-results" style="color:var(--faker);text-align:center;">Failed to load leaderboard.</div>';
-          return;
-        }
-        const dataTable = response.getDataTable();
-        gamerData = [];
-        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
-          gamerData.push({
-            username: dataTable.getValue(i, 0),
-            points: parseInt(dataTable.getValue(i, 1), 10)
-          });
-        }
-        rankedGamerData = [...gamerData].sort((a, b) => b.points - a.points);
-        rankedGamerData.forEach((row, idx) => (row.rank = idx + 1));
-
-        // Show top 50 by default
-        renderGamerLeaderboard(rankedGamerData.slice(0, 50));
-        document.getElementById('gamer-back-button').style.display = 'none';
-        document.getElementById('gamer-updated').textContent = 'Last Updated on ' + getUTCStamp();
-      });
-    }
+    let scribeData = [];
+    let rankedScribeData = [];
 
     function getGamerTier(points) {
       if (points >= 400) return { name: 'FAKER', class: 'faker-bg' };
@@ -1193,87 +1099,22 @@
       return { name: 'Gamer I', class: 'gamer1-bg' };
     }
 
-    function handleGamerSearch() {
-      const input = document.getElementById('gamer-search-input');
-      const term = input.value.trim().toLowerCase();
-      if (term === '') {
-        renderGamerLeaderboard(rankedGamerData.slice(0, 50));
-        document.getElementById('gamer-back-button').style.display = 'none';
-        isGamerSearchView = false;
-        return;
-      }
-      const filtered = rankedGamerData.filter(r => r.username.toLowerCase().includes(term));
-      renderGamerLeaderboard(filtered.slice(0, 20), true, term);
-      document.getElementById('gamer-back-button').style.display = 'block';
-      isGamerSearchView = true;
-    }
-
-    function clearGamerSearch() {
-      const input = document.getElementById('gamer-search-input');
-      input.value = '';
-      document.getElementById('gamer-clear-search').style.display = 'none';
-      handleGamerSearch();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('gamer-search-input')
-        .addEventListener('input', () => {
-          document.getElementById('gamer-clear-search').style.display = 
-            document.getElementById('gamer-search-input').value ? 'block' : 'none';
-          handleGamerSearch();
-        });
-      document.getElementById('gamer-clear-search').addEventListener('click', clearGamerSearch);
-      document.getElementById('gamer-back-button').addEventListener('click', () => {
-        renderGamerLeaderboard(rankedGamerData.slice(0, 50));
-        document.getElementById('gamer-back-button').style.display = 'none';
-        isGamerSearchView = false;
-      });
-    });
-
-    // ======== Scribe Leaderboard Script ========
-    function renderScribeLeaderboard(data, showTrueRank = false, searchTerm = '') {
-      const container = document.getElementById('scribe_table_div');
-      container.innerHTML = '';
-
+    function renderGamerLeaderboard(data, showTrueRank = false) {
+      const tbody = document.querySelector('#gamer-leaderboard tbody');
+      tbody.innerHTML = '';
       if (data.length === 0) {
-        const noResults = document.createElement('div');
-        noResults.className = 'no-results';
-        noResults.innerHTML = `
-          <i class="fas fa-search" style="font-size: 2rem; opacity: 0.5; margin-bottom: 1rem;"></i>
-          <h3>No users found</h3>
-          <p>Try searching with a different username</p>
-        `;
-        container.appendChild(noResults);
+        tbody.innerHTML = `<tr><td colspan="4" class="no-results">
+          <div class="no-results-icon">🔍</div>
+          No results
+        </td></tr>`;
         return;
       }
-
-      const table = document.createElement('table');
-      table.className = 'leaderboard-table';
-      const thead = document.createElement('thead');
-      const headerRow = document.createElement('tr');
-      ['#', 'Username', 'Points', 'Tier'].forEach(text => {
-        const th = document.createElement('th');
-        th.textContent = text;
-        headerRow.appendChild(th);
-      });
-      thead.appendChild(headerRow);
-      table.appendChild(thead);
-
-      const tbody = document.createElement('tbody');
-      table.appendChild(tbody);
-
-      data.forEach((rowData, i) => {
-        const tr = document.createElement('tr');
-        tr.style.opacity = '0';
-        setTimeout(() => {
-          tr.classList.add('row-appear');
-        }, i * 50);
-
-        const tier = getScribeTier(rowData.points);
+      data.forEach((row, i) => {
+        const tier = getGamerTier(row.points);
         let rankDisplay = '';
         if (showTrueRank) {
-          const trueRank = rankedScribeData.findIndex(
-            r => r.username === rowData.username && r.points === rowData.points
+          const trueRank = rankedGamerData.findIndex(
+            (r) => r.username === row.username && r.points === row.points
           ) + 1;
           if (trueRank === 1) rankDisplay = '<span class="medal">🥇</span>';
           else if (trueRank === 2) rankDisplay = '<span class="medal">🥈</span>';
@@ -1285,63 +1126,14 @@
           else if (i === 2) rankDisplay = '<span class="medal">🥉</span>';
           else rankDisplay = i + 1;
         }
-
-        const tdRank = document.createElement('td');
-        tdRank.className = 'rank';
-        tdRank.innerHTML = rankDisplay;
-        tr.appendChild(tdRank);
-
-        const tdUser = document.createElement('td');
-        tdUser.textContent = rowData.username;
-        tr.appendChild(tdUser);
-
-        const tdPoints = document.createElement('td');
-        tdPoints.textContent = rowData.points;
-        tr.appendChild(tdPoints);
-
-        const tdTier = document.createElement('td');
-        tdTier.className = tier.class;
-        tdTier.textContent = tier.name;
-        tr.appendChild(tdTier);
-
-        if (searchTerm && !rowData.username.toLowerCase().includes(searchTerm.toLowerCase())) {
-          tr.classList.add('hidden-row');
-        }
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="rank">${rankDisplay}</td>
+          <td>${row.username}</td>
+          <td>${row.points}</td>
+          <td class="${tier.class}">${tier.name}</td>
+        `;
         tbody.appendChild(tr);
-      });
-
-      container.appendChild(table);
-    }
-
-    let scribeData = [];
-    let rankedScribeData = [];
-    let isScribeSearchView = false;
-
-    function fetchScribeData() {
-      const query = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B'
-      );
-      query.send(function(response) {
-        if (response.isError()) {
-          document.getElementById('scribe_table_div').innerHTML =
-            '<div class="no-results" style="color:var(--hem);text-align:center;">Failed to load leaderboard.</div>';
-          return;
-        }
-        const dataTable = response.getDataTable();
-        scribeData = [];
-        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
-          scribeData.push({
-            username: dataTable.getValue(i, 0),
-            points: parseInt(dataTable.getValue(i, 1), 10)
-          });
-        }
-        rankedScribeData = [...scribeData].sort((a, b) => b.points - a.points);
-        rankedScribeData.forEach((row, idx) => (row.rank = idx + 1));
-
-        // Show top 50 by default
-        renderScribeLeaderboard(rankedScribeData.slice(0, 50));
-        document.getElementById('scribe-back-button').style.display = 'none';
-        document.getElementById('scribe-updated').textContent = 'Last Updated on ' + getUTCStamp();
       });
     }
 
@@ -1351,64 +1143,142 @@
       return { name: 'Scribe 1', class: 'scribe1-bg' };
     }
 
-    function handleScribeSearch() {
-      const input = document.getElementById('scribe-search-input');
-      const term = input.value.trim().toLowerCase();
-      if (term === '') {
-        renderScribeLeaderboard(rankedScribeData.slice(0, 50));
-        document.getElementById('scribe-back-button').style.display = 'none';
-        isScribeSearchView = false;
+    function renderScribeLeaderboard(data, showTrueRank = false) {
+      const tbody = document.querySelector('#scribe-leaderboard tbody');
+      tbody.innerHTML = '';
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="no-results">
+          <div class="no-results-icon">🔍</div>
+          No results
+        </td></tr>`;
         return;
       }
-      const filtered = rankedScribeData.filter(r => r.username.toLowerCase().includes(term));
-      renderScribeLeaderboard(filtered.slice(0, 20), true, term);
-      document.getElementById('scribe-back-button').style.display = 'block';
-      isScribeSearchView = true;
+      data.forEach((row, i) => {
+        const tier = getScribeTier(row.points);
+        let rankDisplay = '';
+        if (showTrueRank) {
+          const trueRank = rankedScribeData.findIndex(
+            (r) => r.username === row.username && r.points === row.points
+          ) + 1;
+          if (trueRank === 1) rankDisplay = '<span class="medal">🥇</span>';
+          else if (trueRank === 2) rankDisplay = '<span class="medal">🥈</span>';
+          else if (trueRank === 3) rankDisplay = '<span class="medal">🥉</span>';
+          else rankDisplay = trueRank;
+        } else {
+          if (i === 0) rankDisplay = '<span class="medal">🥇</span>';
+          else if (i === 1) rankDisplay = '<span class="medal">🥈</span>';
+          else if (i === 2) rankDisplay = '<span class="medal">🥉</span>';
+          else rankDisplay = i + 1;
+        }
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="rank">${rankDisplay}</td>
+          <td>${row.username}</td>
+          <td>${row.points}</td>
+          <td class="${tier.class}">${tier.name}</td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
-    function clearScribeSearch() {
-      const input = document.getElementById('scribe-search-input');
-      input.value = '';
-      document.getElementById('scribe-clear-search').style.display = 'none';
-      handleScribeSearch();
+    function fetchGamerData() {
+      const query = new google.visualization.Query(
+        'https://docs.google.com/spreadsheets/d/1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw/gviz/tq?sheet=Leaderboard&tq=select%20A,B'
+      );
+      query.send(function (response) {
+        if (response.isError()) {
+          document.querySelector('#gamer-leaderboard tbody').innerHTML =
+            '<tr><td colspan="4" style="color:var(--faker);text-align:center;">Failed to load leaderboard.</td></tr>';
+          return;
+        }
+        const dataTable = response.getDataTable();
+        gamerData = [];
+        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
+          gamerData.push({
+            username: dataTable.getValue(i, 0),
+            points: parseInt(dataTable.getValue(i, 1), 10),
+          });
+        }
+        rankedGamerData = [...gamerData].sort((a, b) => b.points - a.points);
+        rankedGamerData.forEach((row, i) => (row.rank = i + 1));
+        renderGamerLeaderboard(rankedGamerData);
+
+        // Fetch actual timestamp from Meta!A1
+        const gamerMetaQuery = new google.visualization.Query(
+          'https://docs.google.com/spreadsheets/d/1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw/gviz/tq?sheet=Meta&headers=1&tq=select%20A%20limit%201'
+        );
+        gamerMetaQuery.send(resp => {
+          const dt2 = resp.getDataTable();
+          const ts = dt2.getValue(0, 0);
+          document.getElementById('gamer-updated').textContent = ts;
+        });
+      });
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // Gamer search events
-      document.getElementById('gamer-search-input')
-        .addEventListener('input', () => {
-          document.getElementById('gamer-clear-search').style.display =
-            document.getElementById('gamer-search-input').value ? 'block' : 'none';
-          handleGamerSearch();
-        });
-      document.getElementById('gamer-clear-search').addEventListener('click', clearGamerSearch);
-      document.getElementById('gamer-back-button').addEventListener('click', () => {
-        renderGamerLeaderboard(rankedGamerData.slice(0, 50));
-        document.getElementById('gamer-back-button').style.display = 'none';
-        isGamerSearchView = false;
-      });
+    function fetchScribeData() {
+      const query = new google.visualization.Query(
+        'https://docs.google.com/spreadsheets/d/18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B'
+      );
+      query.send(function (response) {
+        if (response.isError()) {
+          document.querySelector('#scribe-leaderboard tbody').innerHTML =
+            '<tr><td colspan="4" style="color:var(--hem);text-align:center;">Failed to load leaderboard.</td></tr>';
+          return;
+        }
+        const dataTable = response.getDataTable();
+        scribeData = [];
+        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
+          scribeData.push({
+            username: dataTable.getValue(i, 0),
+            points: parseInt(dataTable.getValue(i, 1), 10),
+          });
+        }
+        rankedScribeData = [...scribeData].sort((a, b) => b.points - a.points);
+        rankedScribeData.forEach((row, i) => (row.rank = i + 1));
+        renderScribeLeaderboard(rankedScribeData);
 
-      // Scribe search events
-      document.getElementById('scribe-search-input')
-        .addEventListener('input', () => {
-          document.getElementById('scribe-clear-search').style.display =
-            document.getElementById('scribe-search-input').value ? 'block' : 'none';
-          handleScribeSearch();
+        // Fetch actual timestamp from Meta!A1
+        const scribeMetaQuery = new google.visualization.Query(
+          'https://docs.google.com/spreadsheets/d/18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo/gviz/tq?sheet=Meta&headers=1&tq=select%20A%20limit%201'
+        );
+        scribeMetaQuery.send(resp => {
+          const dt2 = resp.getDataTable();
+          const ts = dt2.getValue(0, 0);
+          document.getElementById('scribe-updated').textContent = ts;
         });
-      document.getElementById('scribe-clear-search').addEventListener('click', clearScribeSearch);
-      document.getElementById('scribe-back-button').addEventListener('click', () => {
-        renderScribeLeaderboard(rankedScribeData.slice(0, 50));
-        document.getElementById('scribe-back-button').style.display = 'none';
-        isScribeSearchView = false;
       });
-    });
+    }
 
-    // ======== Initialize all leaderboards ========
-    google.charts.setOnLoadCallback(() => {
-      initYAP();
+    function initLeaderboards() {
       fetchGamerData();
       fetchScribeData();
-    });
+
+      document.getElementById('gamer-search').addEventListener('input', function () {
+        const val = this.value.trim().toLowerCase();
+        if (!val) {
+          renderGamerLeaderboard(rankedGamerData);
+        } else {
+          const filtered = rankedGamerData.filter((row) =>
+            row.username.toLowerCase().includes(val)
+          );
+          renderGamerLeaderboard(filtered, true);
+        }
+      });
+
+      document.getElementById('scribe-search').addEventListener('input', function () {
+        const val = this.value.trim().toLowerCase();
+        if (!val) {
+          renderScribeLeaderboard(rankedScribeData);
+        } else {
+          const filtered = rankedScribeData.filter((row) =>
+            row.username.toLowerCase().includes(val)
+          );
+          renderScribeLeaderboard(filtered, true);
+        }
+      });
+    }
+
+    google.charts.setOnLoadCallback(initLeaderboards);
   </script>
 </body>
 </html>
