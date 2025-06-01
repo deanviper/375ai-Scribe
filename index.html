@@ -783,37 +783,36 @@
     }
 
     function fetchGamerData(key) {
-      const q = new google.visualization.Query(
+      const query = new google.visualization.Query(
         `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B`
       );
-      q.send(resp => {
-        if (resp.isError()) {
-          document.querySelector('#gamer-leaderboard tbody').innerHTML = `
-            <tr><td colspan="4" style="text-align:center;color:var(--muted);">Failed to load leaderboard.</td></tr>
-          `;
+      query.send(function (response) {
+        if (response.isError()) {
+          document.querySelector('#gamer-leaderboard tbody').innerHTML =
+            '<tr><td colspan="4" style="color:var(--faker);text-align:center;">Failed to load leaderboard.</td></tr>';
           return;
         }
-        const dt = resp.getDataTable();
+        const dataTable = response.getDataTable();
         gamerData = [];
-        for (let i = 0; i < dt.getNumberOfRows(); i++) {
+        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
           gamerData.push({
-            username: dt.getValue(i, 0),
-            points:   parseInt(dt.getValue(i, 1), 10)
+            username: dataTable.getValue(i, 0),
+            points: parseInt(dataTable.getValue(i, 1), 10),
           });
         }
-        gamerData.sort((a, b) => b.points - a.points);
-        renderGamerLeaderboard(gamerData, false);
+        rankedGamerData = [...gamerData].sort((a, b) => b.points - a.points);
+        rankedGamerData.forEach((row, i) => (row.rank = i + 1));
+        renderGamerLeaderboard(rankedGamerData);
 
-        // Fetch timestamp from Meta!A1
-        const metaQ = new google.visualization.Query(
+        // Fetch timestamp from Meta sheet
+        const metaQuery = new google.visualization.Query(
           `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&tq=select%20A`
         );
-        metaQ.send(mR => {
-          if (!mR.isError()) {
-            const mDt = mR.getDataTable();
-            if (mDt.getNumberOfRows() > 0) {
-              document.getElementById('gamer-updated').textContent =
-                'Last Updated on ' + mDt.getValue(0, 0);
+        metaQuery.send(metaRes => {
+          if (!metaRes.isError()) {
+            const metaData = metaRes.getDataTable();
+            if (metaData.getNumberOfRows() > 0) {
+              document.getElementById('gamer-updated').textContent = 'Last Updated on ' + metaData.getValue(0, 0);
             }
           }
         });
@@ -909,37 +908,36 @@
     }
 
     function fetchScribeData(key) {
-      const q = new google.visualization.Query(
+      const query = new google.visualization.Query(
         `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Leaderboard&tq=select%20A,B`
       );
-      q.send(resp => {
-        if (resp.isError()) {
-          document.querySelector('#scribe-leaderboard tbody').innerHTML = `
-            <tr><td colspan="4" style="text-align:center;color:var(--muted);">Failed to load leaderboard.</td></tr>
-          `;
+      query.send(function (response) {
+        if (response.isError()) {
+          document.querySelector('#scribe-leaderboard tbody').innerHTML =
+            '<tr><td colspan="4" style="color:var(--hem);text-align:center;">Failed to load leaderboard.</td></tr>';
           return;
         }
-        const dt = resp.getDataTable();
+        const dataTable = response.getDataTable();
         scribeData = [];
-        for (let i = 0; i < dt.getNumberOfRows(); i++) {
+        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
           scribeData.push({
-            username: dt.getValue(i, 0),
-            points:   parseInt(dt.getValue(i, 1), 10)
+            username: dataTable.getValue(i, 0),
+            points: parseInt(dataTable.getValue(i, 1), 10),
           });
         }
-        scribeData.sort((a, b) => b.points - a.points);
-        renderScribeLeaderboard(scribeData, false);
+        rankedScribeData = [...scribeData].sort((a, b) => b.points - a.points);
+        rankedScribeData.forEach((row, i) => (row.rank = i + 1));
+        renderScribeLeaderboard(rankedScribeData);
 
-        // Fetch timestamp from Meta!A1
-        const metaQ = new google.visualization.Query(
+        // Fetch timestamp from Meta sheet
+        const metaQuery = new google.visualization.Query(
           `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&tq=select%20A`
         );
-        metaQ.send(mR => {
-          if (!mR.isError()) {
-            const mDt = mR.getDataTable();
-            if (mDt.getNumberOfRows() > 0) {
-              document.getElementById('scribe-updated').textContent =
-                'Last Updated on ' + mDt.getValue(0, 0);
+        metaQuery.send(metaRes => {
+          if (!metaRes.isError()) {
+            const metaData = metaRes.getDataTable();
+            if (metaData.getNumberOfRows() > 0) {
+              document.getElementById('scribe-updated').textContent = 'Last Updated on ' + metaData.getValue(0, 0);
             }
           }
         });
