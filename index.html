@@ -507,12 +507,12 @@
     }
 
     /* Gamer/Scribe gradients */
-    .gamer1 { background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%); }
-    .gamer2 { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%); }
-    .faker  { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%); }
-    .scribe1{ background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%); }
-    .scribe2{ background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%); }
-    .hem    { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%); }
+    .gamer1  { background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%); }
+    .gamer2  { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%); }
+    .faker   { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%); }
+    .scribe1 { background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%); }
+    .scribe2 { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%); }
+    .hem     { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%); }
 
     .gamer1-bg  { background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%) !important; color: #222 !important; }
     .gamer2-bg  { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%) !important; color: #222 !important; }
@@ -939,17 +939,16 @@
         renderLeaderboard(allUsers.slice(0, 50), pfpMap);
         document.getElementById('back-button').style.display = 'none';
 
-        // Now fetch Meta!A1 for “Last Updated”
-        const metaQuery = new google.visualization.Query(
-          `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&headers=1&tq=select%20A%20limit%201`
-        );
-        metaQuery.send(r2 => {
-          const dt2 = r2.getDataTable();
-          if (dt2.getNumberOfRows() > 0) {
-            const ts = dt2.getValue(0, 0);
-            document.getElementById('yap-updated').textContent = ts;
-          }
-        });
+        // Now fetch Meta!A1 via CSV export
+        fetch(`https://docs.google.com/spreadsheets/d/${key}/export?format=csv&range=Meta!A1:A1`)
+          .then(r => r.text())
+          .then(txt => {
+            const ts = txt.replace(/["\r\n]/g, '').trim();
+            if (ts) {
+              document.getElementById('yap-updated').textContent = ts;
+            }
+          })
+          .catch(() => {});
       });
     }
 
@@ -1185,8 +1184,9 @@
     }
 
     function fetchGamerData() {
+      const key = '1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw';
       const query = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw/gviz/tq?sheet=Leaderboard&tq=select%20A,B'
+        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Leaderboard&tq=select%20A,B`
       );
       query.send(function (response) {
         if (response.isError()) {
@@ -1206,22 +1206,23 @@
         rankedGamerData.forEach((row, i) => (row.rank = i + 1));
         renderGamerLeaderboard(rankedGamerData);
 
-        // Fetch Meta!A1
-        const gamerMetaQuery = new google.visualization.Query(
-          'https://docs.google.com/spreadsheets/d/1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw/gviz/tq?sheet=Meta&headers=1&tq=select%20A%20limit%201'
-        );
-        gamerMetaQuery.send(resp => {
-          const dt2 = resp.getDataTable();
-          if (dt2.getNumberOfRows() > 0) {
-            document.getElementById('gamer-updated').textContent = dt2.getValue(0, 0);
-          }
-        });
+        // Fetch Meta!A1 via CSV export
+        fetch(`https://docs.google.com/spreadsheets/d/${key}/export?format=csv&range=Meta!A1:A1`)
+          .then(r => r.text())
+          .then(txt => {
+            const ts = txt.replace(/["\r\n]/g, '').trim();
+            if (ts) {
+              document.getElementById('gamer-updated').textContent = ts;
+            }
+          })
+          .catch(() => {});
       });
     }
 
     function fetchScribeData() {
+      const key = '18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo';
       const query = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B'
+        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B`
       );
       query.send(function (response) {
         if (response.isError()) {
@@ -1241,16 +1242,16 @@
         rankedScribeData.forEach((row, i) => (row.rank = i + 1));
         renderScribeLeaderboard(rankedScribeData);
 
-        // Fetch Meta!A1
-        const scribeMetaQuery = new google.visualization.Query(
-          'https://docs.google.com/spreadsheets/d/18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo/gviz/tq?sheet=Meta&headers=1&tq=select%20A%20limit%201'
-        );
-        scribeMetaQuery.send(resp => {
-          const dt2 = resp.getDataTable();
-          if (dt2.getNumberOfRows() > 0) {
-            document.getElementById('scribe-updated').textContent = dt2.getValue(0, 0);
-          }
-        });
+        // Fetch Meta!A1 via CSV export
+        fetch(`https://docs.google.com/spreadsheets/d/${key}/export?format=csv&range=Meta!A1:A1`)
+          .then(r => r.text())
+          .then(txt => {
+            const ts = txt.replace(/["\r\n]/g, '').trim();
+            if (ts) {
+              document.getElementById('scribe-updated').textContent = ts;
+            }
+          })
+          .catch(() => {});
       });
     }
 
