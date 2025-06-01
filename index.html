@@ -638,13 +638,13 @@
       const SHEET_KEY = '1nE4NPgFSHka7ByLLKaHWaVaKARMCrmb-_e1ZvpdV-cE';
       fetchPFPs(SHEET_KEY).then(pfps => {
         pfpMap = pfps;
-        loadScores(SHEET_KEY, pfpMap);
+        loadYapScores(SHEET_KEY);
       });
 
       document.getElementById('yap-search').addEventListener('input', handleYapSearch);
     }
 
-    function loadScores(key, pfpMap) {
+    function loadYapScores(key) {
       // First fetch the last update time
       const metaQuery = new google.visualization.Query(
         `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&tq=select%20A`
@@ -659,7 +659,6 @@
         }
       });
 
-      // Then fetch the leaderboard data
       const q = new google.visualization.Query(
         `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Temporary%20LB&headers=1&tq=select%20A%2C%20B%20order%20by%20B%20desc`
       );
@@ -776,7 +775,7 @@
     function fetchGamerData() {
       // First fetch the last update time
       const metaQuery = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw/gviz/tq?sheet=Meta&tq=select%20A'
+        `https://docs.google.com/spreadsheets/d/${SHEET_KEY}/gviz/tq?sheet=Meta&tq=select%20A`
       );
       metaQuery.send(metaRes => {
         if (!metaRes.isError()) {
@@ -790,7 +789,7 @@
 
       // Then fetch the leaderboard data
       const query = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw/gviz/tq?sheet=Leaderboard&tq=select%20A,B'
+        `https://docs.google.com/spreadsheets/d/${SHEET_KEY}/gviz/tq?sheet=Leaderboard&tq=select%20A,B`
       );
       query.send(function (response) {
         if (response.isError()) {
@@ -903,7 +902,7 @@
     function fetchScribeData() {
       // First fetch the last update time
       const metaQuery = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo/gviz/tq?sheet=Meta&tq=select%20A'
+        `https://docs.google.com/spreadsheets/d/${SHEET_KEY}/gviz/tq?sheet=Meta&tq=select%20A`
       );
       metaQuery.send(metaRes => {
         if (!metaRes.isError()) {
@@ -917,7 +916,7 @@
 
       // Then fetch the leaderboard data
       const query = new google.visualization.Query(
-        'https://docs.google.com/spreadsheets/d/18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B'
+        `https://docs.google.com/spreadsheets/d/${SHEET_KEY}/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B`
       );
       query.send(function (response) {
         if (response.isError()) {
