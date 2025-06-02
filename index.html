@@ -2,17 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>375ai Leaderboards</title>
+  <title>375 Multi Leaderboards</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Google Charts loader -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/charts/loader.js"></script>
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Animation library -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <style>
+    /* ======== Shared Variables ======== */
     :root {
       --bg: #050607;
       --text: #ffffff;
@@ -21,20 +18,18 @@
       --orange: #FF3D14;
       --table-row: rgba(30, 30, 30, 0.5);
       --highlight: rgba(255, 61, 20, 0.15);
-      --gamer1: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%);
-      --gamer2: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%);
-      --faker: linear-gradient(135deg, #389FFF 0%, #FE4208 100%);
-      --scribe1: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%);
-      --scribe2: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%);
-      --hem: linear-gradient(135deg, #389FFF 0%, #FE4208 100%);
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      --muted: rgba(255, 255, 255, 0.5);
+      --small-text: 0.9rem;
     }
-    
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-    
+
     body {
       background: var(--bg);
       color: var(--text);
@@ -43,7 +38,8 @@
       position: relative;
       overflow-x: hidden;
     }
-    
+
+    /* ======== Background Video + Overlay ======== */
     .background-video {
       position: fixed;
       top: 0;
@@ -53,7 +49,7 @@
       object-fit: cover;
       z-index: -2;
     }
-    
+
     .overlay {
       position: fixed;
       top: 0;
@@ -64,7 +60,8 @@
       backdrop-filter: blur(8px);
       z-index: -1;
     }
-    
+
+    /* ======== Main Container ======== */
     .container {
       max-width: 1000px;
       margin: 0 auto;
@@ -72,259 +69,24 @@
       position: relative;
       z-index: 1;
     }
-    
+
     .header {
       text-align: center;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1rem;
       animation: fadeInDown 0.8s ease-out;
     }
-    
-    h1 {
-      font-size: 3.5rem;
+
+    .header h1 {
+      font-size: 3rem;
       font-weight: 700;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.5rem;
       background: linear-gradient(90deg, #FF3D14, #FF6B14);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       letter-spacing: -0.5px;
       animation: textGlow 2s ease-in-out infinite alternate;
-    }
-    
-    .subtitle {
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 1.25rem;
-      max-width: 600px;
-      margin: 0 auto;
-      animation: fadeInUp 1s ease-out 0.5s both;
-    }
-
-    .last-updated {
-      text-align: center;
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.5);
-      margin-bottom: 1rem;
-      animation: fadeIn 1s ease-out both;
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .tab {
-      padding: 1rem 2rem;
-      background: var(--panel-bg);
-      border: 1px solid var(--border);
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .tab:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .tab.active {
-      background: var(--orange);
-      border-color: var(--orange);
-      box-shadow: 0 0 20px rgba(255, 61, 20, 0.3);
-    }
-
-    .tab-content {
-      display: none;
-      animation: fadeIn 0.5s ease-out;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-    
-    .search-container {
-      margin: 1.5rem auto;
-      max-width: 500px;
-      width: 100%;
       position: relative;
-    }
-    
-    .search-input-wrapper {
-      position: relative;
-      width: 100%;
-    }
-    
-    #search-input {
-      width: 100%;
-      padding: 10px 20px 10px 40px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 50px;
-      color: var(--text);
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      outline: none;
-    }
-    
-    #search-input:focus {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: var(--orange);
-      box-shadow: 0 0 0 3px rgba(255, 61, 20, 0.2);
-    }
-    
-    .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: rgba(255, 255, 255, 0.5);
-      pointer-events: none;
-    }
-    
-    .table-wrapper {
-      width: 100%;
-      border-radius: 16px;
-      overflow: hidden;
-      background: var(--panel-bg);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--border);
-      transition: all 0.3s ease;
-      max-height: 480px;
-      overflow-y: auto;
-    }
-    
-    .table-wrapper:hover {
-      box-shadow: 0 15px 40px rgba(255, 61, 20, 0.15);
-      transform: translateY(-5px);
-    }
-    
-    .table-wrapper::-webkit-scrollbar {
-      width: 8px;
-      background: #23272e;
-      border-radius: 8px;
-    }
-    
-    .table-wrapper::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #232e3a 0%, #2a3a4d 100%);
-      border-radius: 8px;
-    }
-    
-    .table-wrapper {
-      scrollbar-width: thin;
-      scrollbar-color: #2a3a4d #23272e;
-    }
-    
-    #table_div {
-      width: 100%;
-      max-height: 65vh;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--orange) rgba(255, 255, 255, 0.1);
-    }
-    
-    #table_div::-webkit-scrollbar {
-      width: 8px;
-    }
-    
-    #table_div::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-    }
-    
-    #table_div::-webkit-scrollbar-thumb {
-      background-color: rgba(255, 61, 20, 0.5);
-      border-radius: 20px;
-    }
-    
-    #table_div table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-    
-    #table_div th, #table_div td {
-      padding: 1rem 1.25rem;
-      font-size: 1rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    #table_div thead {
-      background: linear-gradient(90deg, #FF3D14, #FF6B14);
-      color: #fff;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    
-    #table_div th {
-      font-weight: 600;
-      text-align: left;
-      letter-spacing: 0.5px;
-    }
-    
-    #table_div tbody tr {
-      transition: all 0.3s ease;
-    }
-    
-    #table_div tbody tr:nth-child(even) {
-      background: var(--table-row);
-    }
-    
-    #table_div tbody tr:hover {
-      background: var(--highlight);
-      transform: translateX(5px);
-    }
-
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      color: var(--text);
-    }
-
-    .swatch {
-      width: 16px;
-      height: 16px;
-      border-radius: 4px;
-      display: inline-block;
-    }
-
-    .gamer1, .scribe1 { background: var(--gamer1); }
-    .gamer2, .scribe2 { background: var(--gamer2); }
-    .faker, .hem { background: var(--faker); }
-
-    .gamer1-bg, .scribe1-bg { background: var(--gamer1) !important; color: #222 !important; }
-    .gamer2-bg, .scribe2-bg { background: var(--gamer2) !important; color: #222 !important; }
-    .faker-bg, .hem-bg { background: var(--faker) !important; color: #fff !important; }
-
-    .discord-link {
-      text-align: center;
-      margin-top: 2rem;
-      color: var(--text);
-      opacity: 0.8;
-    }
-
-    .discord-link a {
-      color: var(--orange);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-
-    .discord-link a:hover {
-      color: #FF6B14;
     }
 
     @keyframes textGlow {
@@ -338,20 +100,12 @@
       }
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 1rem;
+      animation: fadeInUp 1s ease-out 0.5s both;
     }
 
     @keyframes fadeInUp {
@@ -365,62 +119,274 @@
       }
     }
 
-    @media (max-width: 768px) {
-      .container {
-        padding: 2rem 1rem;
-      }
-      
-      h1 {
-        font-size: 2.5rem;
-      }
-      
-      .subtitle {
-        font-size: 1rem;
-      }
-
-      .tabs {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-
-      .tab {
-        padding: 0.75rem 1rem;
-      }
-
-      .legend {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: center;
-      }
-      
-      #table_div th, #table_div td {
-        padding: 0.75rem 1rem;
-        font-size: 0.9rem;
-      }
+    /* ======== Category Buttons ======== */
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      animation: fadeIn 1s ease-out 0.7s both;
     }
 
-    /* YAP Leaderboard specific styles */
-    .username-cell {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+    .category-btn {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.6rem 1.2rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      padding: 0.5rem 0;
     }
 
-    .username-cell:hover {
+    .category-btn.active {
+      border-color: var(--orange);
       color: var(--orange);
     }
 
-    .pfp {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      object-fit: cover;
-      flex-shrink: 0;
-      border: 2px solid rgba(255, 255, 255, 0.2);
+    .category-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+    }
+
+    /* ======== Common FadeIn ======== */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* ======== YAP Leaderboard Styles ======== */
+    .search-container {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: center;
+      position: relative;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeIn 1s ease-out 0.3s both;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 12px 20px 12px 45px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50px;
+      color: var(--text);
+      font-size: 1rem;
       transition: all 0.3s ease;
+      outline: none;
+    }
+
+    #search-input:focus {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255, 61, 20, 0.2);
+    }
+
+    #search-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .search-icon { /* Applies to all search icons */
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+    }
+
+    #clear-search {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.5);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: none; /* Initially hidden */
+    }
+
+    #clear-search:hover {
+      color: var(--orange);
+    }
+
+    .last-updated {
+      text-align: center;
+      font-size: var(--small-text);
+      color: var(--muted);
+      margin-bottom: 1rem;
+      animation: fadeIn 1s ease-out both;
+    }
+
+    .dashboard {
+      display: flex;
+      justify-content: center;
+      animation: fadeIn 1s ease-out 0.6s both;
+    }
+
+    .table-wrapper { /* YAP table wrapper */
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--panel-bg);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .table-wrapper:hover {
+      box-shadow: 0 15px 40px rgba(255, 61, 20, 0.15);
+      transform: translateY(-5px);
+    }
+
+    #table_div { /* YAP table scroll */
+      width: 100%;
+      max-height: 65vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--orange) rgba(255, 255, 255, 0.1);
+    }
+
+    #table_div::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #table_div::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    #table_div::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 61, 20, 0.5);
+      border-radius: 20px;
+    }
+
+    #table_div table { /* YAP table */
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      color: var(--text);
+    }
+
+    #table_div th,
+    #table_div td {
+      padding: 1rem 1.25rem;
+      font-size: 1rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+
+    #table_div thead {
+      background: linear-gradient(90deg, #FF3D14, #FF6B14);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    #table_div th {
+      font-weight: 600;
+      text-align: left;
+      letter-spacing: 0.5px;
+    }
+
+    #table_div th:nth-child(1), /* Rank column */
+    #table_div td:nth-child(1) {
+      width: 4rem;
+      text-align: center;
+    }
+
+    #table_div th:nth-child(3), /* Points column */
+    #table_div td:nth-child(3) {
+      text-align: right;
+      width: 8rem;
+    }
+
+    #table_div tbody tr {
+      transition: all 0.3s ease;
+    }
+
+    #table_div tbody tr:nth-child(even) {
+      background: var(--table-row);
+    }
+
+    #table_div tbody tr:hover {
+      background: var(--highlight);
+      transform: translateX(5px);
+    }
+
+    /* Top 3 positions styling */
+    #table_div tbody tr:nth-child(1) td:first-child {
+      animation: pulseGold 2s infinite alternate;
+    }
+
+    #table_div tbody tr:nth-child(2) td:first-child {
+      animation: pulseSilver 2s infinite alternate;
+    }
+
+    #table_div tbody tr:nth-child(3) td:first-child {
+      animation: pulseBronze 2s infinite alternate;
+    }
+
+    @keyframes pulseGold {
+      0% {
+        text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+      }
+      100% {
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+      }
+    }
+
+    @keyframes pulseSilver {
+      0% {
+        text-shadow: 0 0 5px rgba(192, 192, 192, 0.3);
+      }
+      100% {
+        text-shadow: 0 0 15px rgba(192, 192, 192, 0.8);
+      }
+    }
+
+    @keyframes pulseBronze {
+      0% {
+        text-shadow: 0 0 5px rgba(205, 127, 50, 0.3);
+      }
+      100% {
+        text-shadow: 0 0 15px rgba(205, 127, 50, 0.8);
+      }
+    }
+
+    .pfp {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-right: 0.75rem;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .username-cell {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
     }
 
     .username-cell:hover .pfp {
@@ -428,14 +394,17 @@
       transform: scale(1.1);
     }
 
+    .username-cell:hover .username-text {
+      color: var(--orange);
+    }
+
     .username-text {
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 1rem;
       transition: color 0.3s ease;
       position: relative;
+       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px; /* Adjust as needed */
     }
 
     .username-text::after {
@@ -453,10 +422,55 @@
       width: 100%;
     }
 
+    .points {
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .no-results { /* Shared for YAP and Gamer/Scribe no results */
+      padding: 3rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      animation: fadeIn 0.5s ease-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+     .no-results i, .no-results .no-results-icon {
+        font-size: 2rem;
+     }
+
+
+    .back-button {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      margin-top: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: none; /* Initially hidden for YAP */
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .back-button:hover {
+      background: var(--orange);
+      transform: translateY(-2px);
+    }
+
+    .highlighted {
+      background-color: var(--highlight) !important;
+    }
+
     .twitter-icon {
-      color: #1DA1F2;
-      margin-left: 0.5rem;
-      flex-shrink: 0;
+      margin-left: 6px;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.5);
       transition: color 0.3s ease;
     }
 
@@ -464,76 +478,306 @@
       color: #1DA1F2;
     }
 
-    /* Ranking styles */
-    .rank-cell {
-      text-align: center;
-      font-weight: 600;
-      font-size: 1rem;
-      padding: 0.5rem 1rem;
+    /* ======== Gamer & Scribe Styles ======== */
+    .tab-container {
+      display: none;
+      flex-direction: column;
+      gap: 1.5rem; /* Adjusted gap */
+      animation: fadeIn 0.7s ease-out both;
     }
 
-    .rank-1 {
-      color: #FFD700;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    .tab-container.active {
+      display: flex;
     }
 
-    .rank-2 {
-      color: #C0C0C0;
-      text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+    .legend {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap; /* Allow legend items to wrap */
+      gap: 1rem 1.5rem; /* row-gap column-gap */
+      margin-bottom: 0.5rem; /* Reduced margin */
     }
 
-    .rank-3 {
-      color: #CD7F32;
-      text-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
-    }
-
-    .rank-normal {
-      color: #ffffff;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-    }
-
-    .points {
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    .no-results {
-      text-align: center;
-      padding: 2rem;
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .no-results i {
-      font-size: 2rem;
-      opacity: 0.5;
-      margin-bottom: 1rem;
-    }
-
-    .no-results h3 {
-      margin-bottom: 0.5rem;
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem; /* Slightly smaller legend text */
       color: var(--text);
     }
 
-    .no-results p {
-      font-size: 0.9rem;
+    .swatch {
+      width: 16px; /* Slightly smaller swatch */
+      height: 16px;
+      border-radius: 4px;
+      display: inline-block;
+      border: 1px solid #fff2; /* Adjusted border */
+      background-clip: padding-box;
     }
 
-    /* Row animations */
-    .row-appear {
-      animation: slideInRight 0.4s ease-out forwards;
-      opacity: 0;
-      transform: translateX(20px);
+    /* Gamer/Scribe gradients */
+    .gamer1 { background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%); }
+    .gamer2 { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%); }
+    .faker  { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%); }
+    .scribe1 { background: linear-gradient(135deg, #389FFF 0%, #6EC6FF 100%); }
+    .scribe2 { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%); }
+    .hem    { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%); }
+
+    /* Tier background classes - !important to override potential conflicts */
+    .gamer1-bg  { background: linear-gradient(135deg, rgba(56,159,255,0.7) 0%, rgba(110,198,255,0.7) 100%) !important; color: #fff !important; }
+    .gamer2-bg  { background: linear-gradient(135deg, rgba(56,159,255,0.7) 0%, rgba(0,229,255,0.7) 100%) !important; color: #fff !important; }
+    .faker-bg   { background: linear-gradient(135deg, rgba(56,159,255,0.7) 0%, rgba(254,66,8,0.7) 100%) !important; color: #fff !important; }
+    .scribe1-bg { background: linear-gradient(135deg, rgba(56,159,255,0.7) 0%, rgba(110,198,255,0.7) 100%) !important; color: #fff !important; }
+    .scribe2-bg { background: linear-gradient(135deg, rgba(56,159,255,0.7) 0%, rgba(0,229,255,0.7) 100%) !important; color: #fff !important; }
+    .hem-bg     { background: linear-gradient(135deg, rgba(56,159,255,0.7) 0%, rgba(254,66,8,0.7) 100%) !important; color: #fff !important; }
+
+
+    .search-bar-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.5rem; /* Reduced margin */
+      width: 100%;
+      max-width: 400px; /* Max width for search bar */
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      z-index: 2; /* Ensure search bar is above table content if sticky is added later */
     }
-    
-    @keyframes slideInRight {
-      from {
-        opacity: 0;
-        transform: translateX(20px);
+
+    .search-bar { /* Gamer/Scribe search bar */
+      display: flex;
+      align-items: center;
+      background: rgba(26, 26, 26, 0.9); /* Slightly more opaque */
+      border-radius: 50px; /* Rounded like YAP search */
+      box-shadow: 0 1px 8px #0003;
+      padding: 0px 15px 0px 0px; /* Adjusted padding */
+      width: 100%;
+      transition: box-shadow .2s, border .2s, background .2s;
+      border: 1px solid var(--border);
+    }
+    .search-bar .search-icon { /* Specific for Gamer/Scribe search icon */
+        position: static; /* Overriding absolute positioning from general .search-icon */
+        transform: none;
+        margin-left: 15px; /* Add some padding for the icon */
+        margin-right: 8px;
+        color: var(--muted);
+        font-size: 1rem;
+        transition: color 0.2s;
+    }
+
+
+    .search-bar:focus-within {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255, 61, 20, 0.2);
+      background: rgba(255, 255, 255, 0.12);
+    }
+     .search-bar:focus-within .search-icon {
+        color: var(--orange);
+     }
+
+
+    .search-bar input {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      width: 100%;
+      padding: 10px 15px 10px 0px; /* Adjusted padding */
+      font-family: 'Inter', sans-serif;
+      transition: color 0.2s;
+    }
+     .search-bar input::placeholder {
+        color: rgba(255,255,255,0.5);
+     }
+
+    .search-bar input:focus {
+      color: #fff;
+    }
+
+    .table-scroll { /* Gamer/Scribe table scroll container */
+      max-height: 60vh; /* Adjusted height */
+      overflow-y: auto;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      background: var(--panel-bg); /* Same as YAP panel */
+      border: 1px solid var(--border); /* Same as YAP panel */
+      transition: background 0.2s;
+    }
+
+    .table-scroll::-webkit-scrollbar {
+      width: 8px;
+      background: rgba(255,255,255,0.05); /* Consistent scrollbar track */
+    }
+
+    .table-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255,61,20,0.5); /* Consistent scrollbar thumb */
+      border-radius: 20px;
+    }
+
+    .table-scroll { /* Firefox scrollbar styling */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,61,20,0.5) rgba(255,255,255,0.05);
+    }
+
+    .leaderboard-table { /* Gamer/Scribe table */
+      width: 100%;
+      border-collapse: separate; /* Use separate for border-spacing and rounded corners on table */
+      border-spacing: 0;
+      background: transparent; /* Background is on .table-scroll */
+      font-family: 'Inter', sans-serif;
+      border-radius: var(--radius); /* For overflow hidden to work */
+      overflow: hidden; /* Clip sticky header corners */
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+      padding: 0.8rem 1rem; /* Adjusted padding */
+      text-align: left; /* Align text left for better readability */
+      font-size: 0.95rem; /* Adjusted font size */
+      transition: background 0.2s;
+      color: var(--text);
+      border-bottom: 1px solid var(--border); /* Add subtle row separators */
+    }
+     .leaderboard-table tr:last-child td {
+        border-bottom: none; /* Remove border for the last row */
+     }
+
+
+    .leaderboard-table th {
+      background: linear-gradient(90deg, #FF3D14, #FF6B14); /* Consistent header */
+      color: #fff;
+      font-weight: 700; /* Bolder headers */
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      font-family: 'Oswald', sans-serif; /* Oswald for headers */
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid rgba(255,61,20,0.5); /* Stronger border for header */
+    }
+    /* Specific column alignments for Gamer/Scribe tables */
+    .leaderboard-table th:first-child, .leaderboard-table td:first-child { /* Rank */
+        text-align: center;
+        width: 15%; /* Width for rank */
+    }
+    .leaderboard-table th:nth-child(2), .leaderboard-table td:nth-child(2) { /* Username */
+        width: 45%; /* Width for username */
+    }
+    .leaderboard-table th:nth-child(3), .leaderboard-table td:nth-child(3) { /* Points/XP */
+        text-align: right;
+        width: 20%; /* Width for points */
+    }
+     .leaderboard-table th:last-child, .leaderboard-table td:last-child { /* Tier */
+        text-align: center;
+        width: 20%; /* Width for tier */
+    }
+
+
+    .leaderboard-table tbody tr {
+      transition: background 0.2s, opacity 0.3s;
+      /* opacity: 0; Animation handled by JS for smoother loading */
+      /* animation: fadeIn 0.7s forwards; */
+    }
+     .leaderboard-table tbody tr:nth-child(even) {
+        background: var(--table-row); /* Consistent even row background */
+     }
+
+    .leaderboard-table tbody tr:hover {
+      background: var(--highlight) !important; /* Consistent hover */
+    }
+
+    .rank { /* For rank text if not a medal */
+      font-weight: 700;
+      color: var(--muted); /* Muted color for normal ranks */
+      font-size: 1rem;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    .medal {
+      font-size: 1.3em; /* Adjusted medal size */
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .medal.gold { color: gold; }
+    .medal.silver { color: silver; }
+    .medal.bronze { color: #cd7f32; }
+
+
+    /* ======== Responsive ======== */
+    @media (max-width: 768px) {
+      .container {
+        padding: 2rem 0.5rem; /* Reduced padding on smaller screens */
       }
-      to {
-        opacity: 1;
-        transform: translateX(0);
+      .header h1 {
+        font-size: 2.5rem;
       }
+      .subtitle {
+        font-size: 1rem;
+      }
+      #table_div th,
+      #table_div td,
+      .leaderboard-table th,
+      .leaderboard-table td {
+        padding: 0.75rem 0.5rem; /* Reduced padding in tables */
+        font-size: 0.9rem;
+      }
+      .pfp {
+        width: 28px;
+        height: 28px;
+        margin-right: 0.5rem;
+      }
+       .username-text {
+        max-width: 120px; /* Adjust for smaller screens */
+      }
+      #table_div th:nth-child(1),
+      #table_div td:nth-child(1) {
+        width: 3rem;
+      }
+      .search-bar-wrap {
+        max-width: 90%;
+      }
+       .legend { gap: 0.5rem 1rem; }
+       .legend-item { font-size: 0.8rem; }
+    }
+
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+      .subtitle {
+        font-size: 0.9rem;
+      }
+       .categories {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+       }
+       .category-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+       }
+      #search-input {
+        font-size: 0.9rem;
+        padding: 10px 15px 10px 40px;
+      }
+      #table_div th:nth-child(3),
+      #table_div td:nth-child(3) {
+        width: 5rem; /* Adjusted YAP points column */
+      }
+       .leaderboard-table th,
+       .leaderboard-table td {
+        font-size: 0.85rem; /* Smaller font in tables */
+        padding: 0.6rem 0.4rem;
+      }
+       .username-text {
+        max-width: 80px;
+      }
+        /* Adjust column widths for very small screens for Gamer/Scribe tables */
+        .leaderboard-table th:first-child, .leaderboard-table td:first-child { width: 12%; }
+        .leaderboard-table th:nth-child(2), .leaderboard-table td:nth-child(2) { width: 40%; }
+        .leaderboard-table th:nth-child(3), .leaderboard-table td:nth-child(3) { width: 23%; }
+        .leaderboard-table th:last-child, .leaderboard-table td:last-child { width: 25%; }
+
+        .medal { font-size: 1.1em;}
     }
   </style>
 </head>
@@ -542,218 +786,275 @@
     <source src="https://sachdev.b-cdn.net/hero-compressed.mp4" type="video/mp4">
   </video>
   <div class="overlay"></div>
-  
+
   <div class="container">
     <div class="header">
-      <h1>375ai Leaderboards</h1>
-      <p class="subtitle">Check out top users ranked by their performance scores</p>
+      <h1>375 Leaderboards</h1>
+      <p class="subtitle">Switch between Yap, Gamer, and Scribe leaderboards</p>
     </div>
 
-    <div class="tabs">
-      <div class="tab active" data-tab="yap">YAP Leaderboard</div>
-      <div class="tab" data-tab="gamer">Gamer Leaderboard</div>
-      <div class="tab" data-tab="scribe">Scribe Leaderboard</div>
+    <div class="categories">
+      <button class="category-btn active" data-content="yap">YAP</button>
+      <button class="category-btn" data-content="gamer">GAMER</button>
+      <button class="category-btn" data-content="scribe">SCRIBE</button>
     </div>
 
-    <!-- YAP Leaderboard -->
-    <div class="tab-content active" id="yap-content">
+    <div id="yap-section" class="tab-container active">
       <div class="last-updated" id="yap-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="search-container">
         <div class="search-input-wrapper">
           <i class="fas fa-search search-icon"></i>
-          <input id="yap-search" type="text" placeholder="Search for username..." autocomplete="off" />
+          <input id="search-input" type="text" placeholder="Search for username..." autocomplete="off" />
+          <button id="clear-search"><i class="fas fa-times"></i></button>
         </div>
       </div>
-      <div class="table-wrapper">
-        <div id="yap-table"></div>
+
+      <div class="dashboard">
+        <div class="table-wrapper">
+          <div id="table_div"></div>
+        </div>
       </div>
+
+      <button id="back-button" class="back-button">
+        <i class="fas fa-arrow-left"></i> Back to Leaderboard
+      </button>
+
+      <div id="toast-container"></div>
     </div>
 
-    <!-- Gamer Leaderboard -->
-    <div class="tab-content" id="gamer-content">
+    <div id="gamer-section" class="tab-container">
       <div class="last-updated" id="gamer-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="legend">
         <div class="legend-item"><span class="swatch gamer1"></span> Gamer I: 0–199 XPs</div>
         <div class="legend-item"><span class="swatch gamer2"></span> Gamer II: 200–399 XPs</div>
         <div class="legend-item"><span class="swatch faker"></span> FAKER: 400+ XPs</div>
       </div>
-      <div class="search-container">
-        <div class="search-input-wrapper">
+      <div class="search-bar-wrap">
+        <form class="search-bar" onsubmit="event.preventDefault(); handleGamerSearch();">
           <i class="fas fa-search search-icon"></i>
-          <input id="gamer-search" type="text" placeholder="Search for username..." autocomplete="off" />
-        </div>
+          <input id="gamer-search" type="text" placeholder="Search username..." autocomplete="off" />
+        </form>
       </div>
-      <div class="table-wrapper">
-        <div id="gamer-table"></div>
+      <div class="table-scroll">
+        <table class="leaderboard-table" id="gamer-leaderboard">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Total XP</th>
+              <th>Tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" style="text-align:center;color:var(--muted);">Loading...</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Scribe Leaderboard -->
-    <div class="tab-content" id="scribe-content">
+    <div id="scribe-section" class="tab-container">
       <div class="last-updated" id="scribe-updated">Last Updated on --/-- - --:-- UTC</div>
       <div class="legend">
         <div class="legend-item"><span class="swatch scribe1"></span> Scribe 1: 0–149 XP</div>
         <div class="legend-item"><span class="swatch scribe2"></span> Scribe 2: 150–399 XP</div>
         <div class="legend-item"><span class="swatch hem"></span> HEMMINGWAY: 400+ XP</div>
       </div>
-      <div class="search-container">
-        <div class="search-input-wrapper">
-          <i class="fas fa-search search-icon"></i>
-          <input id="scribe-search" type="text" placeholder="Search for username..." autocomplete="off" />
-        </div>
+      <div class="search-bar-wrap">
+        <form class="search-bar" onsubmit="event.preventDefault(); handleScribeSearch();">
+           <i class="fas fa-search search-icon"></i>
+          <input id="scribe-search" type="text" placeholder="Search username..." autocomplete="off" />
+        </form>
       </div>
-      <div class="table-wrapper">
-        <div id="scribe-table"></div>
+      <div class="table-scroll">
+        <table class="leaderboard-table" id="scribe-leaderboard">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Total Points</th>
+              <th>Tier</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" style="text-align:center;color:var(--muted);">Loading...</td></tr>
+          </tbody>
+        </table>
       </div>
-    </div>
-
-    <div class="discord-link">
-      Join our Discord <a href="https://discord.gg/375ai" target="_blank" rel="noopener">here</a>
     </div>
   </div>
 
-  <script>
-    google.charts.load('current', {packages: ['table']});
-    google.charts.setOnLoadCallback(init);
+<script>
+    // ======== Category Switching Logic ========
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    const yapSection    = document.getElementById('yap-section');
+    const gamerSection  = document.getElementById('gamer-section');
+    const scribeSection = document.getElementById('scribe-section');
+    const yapSearchInput = document.getElementById('search-input');
+    const yapClearSearchBtn = document.getElementById('clear-search');
+    const yapBackButton = document.getElementById('back-button');
 
-    // Global variables
-    let yapData = [];
-    let gamerData = [];
-    let scribeData = [];
-    let pfpMap = {};
 
-    function init() {
-      // Initialize all leaderboards
-      initYapLeaderboard();
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const target = btn.dataset.content;
+        yapSection.classList.toggle('active', target === 'yap');
+        gamerSection.classList.toggle('active', target === 'gamer');
+        scribeSection.classList.toggle('active', target === 'scribe');
+      });
+    });
+
+    // ======== Leaderboards Script ========
+    google.charts.load('current', { packages: ['table'] });
+
+    let allUsers    = []; // For YAP
+    let gamerData   = []; // For Gamer
+    let scribeData  = []; // For Scribe
+    let pfpMap      = {}; // For YAP
+
+    google.charts.setOnLoadCallback(initAll);
+
+    function initAll() {
+      initYAPLeaderboard();
       initGamerLeaderboard();
       initScribeLeaderboard();
-      setupTabSwitching();
     }
 
-    function setupTabSwitching() {
-      document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-          // Remove active class from all tabs and contents
-          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-          document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-          
-          // Add active class to clicked tab and corresponding content
-          tab.classList.add('active');
-          document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
-        });
+    // ------- YAP Leaderboard -------
+    function initYAPLeaderboard() {
+      const KEY = '1nE4NPgFSHka7ByLLKaHWaVaKARMCrmb-_e1ZvpdV-cE';
+      fetchPFPs(KEY).then(map => {
+        pfpMap = map;
+        loadYAPScores(KEY);
       });
+      yapSearchInput.addEventListener('input', handleYAPSearch);
+      yapClearSearchBtn.addEventListener('click', clearYAPSearch);
+      yapBackButton.addEventListener('click', clearYAPSearch); // Back button also clears search
     }
 
-    // YAP Leaderboard Functions
-    function initYapLeaderboard() {
-      const SHEET_KEY = '1nE4NPgFSHka7ByLLKaHWaVaKARMCrmb-_e1ZvpdV-cE';
-      fetchPFPs(SHEET_KEY).then(pfps => {
-        pfpMap = pfps;
-        loadScores(SHEET_KEY, pfpMap);
-      });
-
-      document.getElementById('yap-search').addEventListener('input', handleYapSearch);
-    }
-
-    function loadScores(key, pfpMap) {
-      const q = new google.visualization.Query(
+    function loadYAPScores(key) {
+      const scoreQuery = new google.visualization.Query(
         `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Temporary%20LB&headers=1&tq=select%20A%2C%20B%20order%20by%20B%20desc`
       );
-      q.send(res => {
+      scoreQuery.send(res => {
+        if (res.isError()) {
+            console.error('Error fetching YAP scores:', res.getDetailedMessage());
+            document.getElementById('yap-updated').textContent = 'Last Updated on: Error loading data';
+            document.getElementById('table_div').innerHTML = `<div class="no-results"><i class="fas fa-exclamation-triangle"></i>Failed to load YAP leaderboard.</div>`;
+            return;
+        }
         const dt = res.getDataTable();
-        yapData = [];
+        allUsers = [];
         for (let i = 0; i < dt.getNumberOfRows(); i++) {
-          yapData.push({
+          allUsers.push({
             username: dt.getValue(i, 0),
-            points: dt.getValue(i, 1)
+            points:   parseFloat(dt.getValue(i, 1)) || 0
           });
         }
-        renderYapLeaderboard(yapData);
-        
-        // Fetch timestamp from Meta sheet
+        renderYAPLeaderboard(allUsers);
+        yapBackButton.style.display = 'none';
+
         const metaQuery = new google.visualization.Query(
           `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&tq=select%20A`
         );
         metaQuery.send(metaRes => {
           if (!metaRes.isError()) {
-            const metaData = metaRes.getDataTable();
-            if (metaData.getNumberOfRows() > 0) {
-              document.getElementById('yap-updated').textContent = 'Last Updated on ' + metaData.getValue(0, 0);
+            const mDt = metaRes.getDataTable();
+            if (mDt.getNumberOfRows() > 0 && mDt.getValue(0,0) != null) {
+              document.getElementById('yap-updated').textContent =
+                'Last Updated on ' + mDt.getValue(0, 0);
+            } else {
+              document.getElementById('yap-updated').textContent = 'Last Updated on: N/A';
             }
+          } else {
+            console.error('Error fetching YAP timestamp:', metaRes.getDetailedMessage());
+            document.getElementById('yap-updated').textContent = 'Last Updated on: Error';
           }
         });
       });
     }
 
-    function handleYapSearch() {
-      const searchTerm = this.value.trim().toLowerCase();
-      const filtered = yapData.filter(user => 
-        user.username.toLowerCase().includes(searchTerm)
-      );
-      renderYapLeaderboard(filtered);
+    function handleYAPSearch() {
+      const term = yapSearchInput.value.trim().toLowerCase();
+      yapClearSearchBtn.style.display = term ? 'block' : 'none';
+      if (!term) {
+        renderYAPLeaderboard(allUsers);
+        yapBackButton.style.display = 'none';
+        return;
+      }
+      const filtered = allUsers.filter(u => u.username.toLowerCase().includes(term));
+      renderYAPLeaderboard(filtered);
+      yapBackButton.style.display = filtered.length < allUsers.length || filtered.length === 0 ? 'block' : 'none';
     }
 
-    function renderYapLeaderboard(users) {
-      const tableDiv = document.getElementById('yap-table');
-      tableDiv.innerHTML = '';
+    function clearYAPSearch() {
+      yapSearchInput.value = '';
+      yapClearSearchBtn.style.display = 'none';
+      renderYAPLeaderboard(allUsers);
+      yapBackButton.style.display = 'none';
+    }
 
-      if (users.length === 0) {
-        tableDiv.innerHTML = `
+    function renderYAPLeaderboard(usersToRender) {
+      const container = document.getElementById('table_div');
+      container.innerHTML = '';
+      if (usersToRender.length === 0) {
+        container.innerHTML = `
           <div class="no-results">
             <i class="fas fa-search"></i>
             <h3>No users found</h3>
-            <p>Try searching with a different username</p>
+            <p>Try searching with a different username or check back later.</p>
           </div>
         `;
         return;
       }
-
       const table = document.createElement('table');
-      
-      // Create header
       const thead = table.createTHead();
-      const headerRow = thead.insertRow();
-      ['#', 'User', 'Points'].forEach(headerText => {
+      const hr = thead.insertRow();
+      ['#', 'User', 'Points', ''].forEach(text => {
         const th = document.createElement('th');
-        th.textContent = headerText;
-        headerRow.appendChild(th);
+        th.textContent = text;
+        hr.appendChild(th);
       });
-
-      // Create body
       const tbody = table.createTBody();
-      users.slice(0, 50).forEach((user, index) => {
+      usersToRender.slice(0, 50).forEach((user, idx) => { // Display top 50 or filtered
         const row = tbody.insertRow();
-        row.style.opacity = "0";
-        setTimeout(() => {
-          row.classList.add('row-appear');
-        }, index * 50);
-        
-        // Rank
-        const rankCell = row.insertCell();
-        rankCell.className = 'rank-cell';
-        if (index === 0) {
-          rankCell.innerHTML = '<span class="rank-1">🥇</span>';
-        } else if (index === 1) {
-          rankCell.innerHTML = '<span class="rank-2">🥈</span>';
-        } else if (index === 2) {
-          rankCell.innerHTML = '<span class="rank-3">🥉</span>';
-        } else {
-          rankCell.innerHTML = `<span class="rank-normal">${index + 1}</span>`;
-        }
+        row.style.animation = `fadeIn 0.5s ease-out ${idx * 0.03}s forwards`;
+        row.style.opacity = '0';
 
-        // User with profile picture
+
+        const rankCell = row.insertCell();
+        const displayRank = allUsers.findIndex(u => u.username === user.username) + 1;
+
+        if (displayRank === 1) {
+          rankCell.innerHTML = '<span class="medal gold">🥇</span> 1';
+          rankCell.style.color = 'gold';
+        } else if (displayRank === 2) {
+          rankCell.innerHTML = '<span class="medal silver">🥈</span> 2';
+          rankCell.style.color = 'silver';
+        } else if (displayRank === 3) {
+          rankCell.innerHTML = '<span class="medal bronze">🥉</span> 3';
+          rankCell.style.color = '#cd7f32';
+        } else {
+          rankCell.textContent = displayRank.toString();
+        }
+         if (displayRank <=3) rankCell.style.fontWeight = '700';
+
+
         const userCell = row.insertCell();
         userCell.className = 'username-cell';
         userCell.onclick = () => {
-          window.open(`https://twitter.com/${user.username}`, '_blank');
+          window.open(`https://twitter.com/${user.username.replace('@', '')}`, '_blank');
         };
 
         const img = document.createElement('img');
-        img.src = pfpMap[user.username] || 'https://via.placeholder.com/24';
+        const pfpSrc = pfpMap[user.username];
+        img.src = pfpSrc || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username.replace('@',''))}&background=random&color=fff&size=32&font-size=0.5`;
         img.className = 'pfp';
         img.alt = `${user.username}'s profile`;
         img.onerror = function() {
-          this.src = 'https://via.placeholder.com/24';
+          this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username.replace('@',''))}&background=random&color=fff&size=32&font-size=0.5`;
         };
         userCell.appendChild(img);
 
@@ -766,65 +1067,102 @@
         twitterIcon.className = 'fab fa-twitter twitter-icon';
         userCell.appendChild(twitterIcon);
 
-        // Points
         const pointsCell = row.insertCell();
         pointsCell.className = 'points';
         pointsCell.textContent = user.points.toFixed(2);
-      });
 
-      tableDiv.appendChild(table);
+        row.insertCell(); // empty column for potential actions
+      });
+      container.appendChild(table);
     }
 
-    // Gamer Leaderboard Functions
+    function fetchPFPs(key) {
+      return new Promise(resolve => {
+        const q = new google.visualization.Query(
+          // Assuming username in Column B, PFP URL in Column F of the *first sheet (gid=0)*
+          `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?gid=0&headers=1&tq=select%20B%2C%20F`
+        );
+        q.send(res => {
+          const map = {};
+          if (!res.isError()) {
+            const dt = res.getDataTable();
+            for (let i = 0; i < dt.getNumberOfRows(); i++) {
+              const username = dt.getValue(i, 0);
+              const pfp = dt.getValue(i, 1);
+              if (username && pfp) {
+                map[username] = pfp;
+              }
+            }
+          } else {
+            console.error("Error fetching PFPs:", res.getDetailedMessage());
+          }
+          resolve(map);
+        });
+      });
+    }
+
+    // ------- Gamer Leaderboard -------
     function initGamerLeaderboard() {
-      const SHEET_KEY = '1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw';
-      fetchGamerData(SHEET_KEY);
-      document.getElementById('gamer-search').addEventListener('input', handleGamerSearch);
+      const KEY = '1-URTW-manGg0sCs0xbvLKhvLpy9ZXmiytUVOR5ZTCXw';
+      fetchGamerData(KEY);
+      document.getElementById('gamer-search').addEventListener('input', () => handleGamerSearch(document.getElementById('gamer-search').value));
     }
 
     function fetchGamerData(key) {
-      const query = new google.visualization.Query(
-        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Temporary%20LB&tq=select%20A,B`
+      // IMPORTANT: Assumes data in sheet named "Leaderboard", columns A (Username), B (XP)
+      const dataQuery = new google.visualization.Query(
+        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Leaderboard&headers=1&tq=select%20A,B`
       );
-      query.send(function (response) {
-        if (response.isError()) {
+      dataQuery.send(resp => {
+        if (resp.isError()) {
           document.querySelector('#gamer-leaderboard tbody').innerHTML =
-            '<tr><td colspan="4" style="color:var(--faker);text-align:center;">Failed to load leaderboard.</td></tr>';
+            `<tr><td colspan="4" class="no-results"><i class="fas fa-exclamation-triangle"></i>Failed to load Gamer leaderboard.</td></tr>`;
+          document.getElementById('gamer-updated').textContent = 'Last Updated on: Error loading data';
+          console.error('Error fetching Gamer scores:', resp.getDetailedMessage());
           return;
         }
-        const dataTable = response.getDataTable();
+        const dt = resp.getDataTable();
         gamerData = [];
-        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
-          gamerData.push({
-            username: dataTable.getValue(i, 0),
-            points: parseInt(dataTable.getValue(i, 1), 10),
-          });
+        for (let i = 0; i < dt.getNumberOfRows(); i++) {
+          const username = dt.getValue(i, 0);
+          const points = parseInt(dt.getValue(i, 1), 10) || 0;
+          if (username) { // Ensure username is not null or empty
+             gamerData.push({ username, points });
+          }
         }
-        rankedGamerData = [...gamerData].sort((a, b) => b.points - a.points);
-        rankedGamerData.forEach((row, i) => (row.rank = i + 1));
-        renderGamerLeaderboard(rankedGamerData);
+        gamerData.sort((a, b) => b.points - a.points);
+        renderGamerLeaderboard(gamerData);
 
-        // Fetch timestamp from Meta sheet
-        const metaQuery = new google.visualization.Query(
+        // Fetch timestamp from Meta!A1
+        // IMPORTANT: Assumes timestamp in sheet named "Meta", cell A1
+        const metaQ = new google.visualization.Query(
           `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&tq=select%20A`
         );
-        metaQuery.send(metaRes => {
-          if (!metaRes.isError()) {
-            const metaData = metaRes.getDataTable();
-            if (metaData.getNumberOfRows() > 0) {
-              document.getElementById('gamer-updated').textContent = 'Last Updated on ' + metaData.getValue(0, 0);
+        metaQ.send(mR => {
+          if (!mR.isError()) {
+            const mDt = mR.getDataTable();
+            if (mDt.getNumberOfRows() > 0 && mDt.getValue(0,0) != null) {
+              document.getElementById('gamer-updated').textContent =
+                'Last Updated on ' + mDt.getValue(0, 0);
+            } else {
+               document.getElementById('gamer-updated').textContent = 'Last Updated on: N/A';
             }
+          } else {
+            document.getElementById('gamer-updated').textContent = 'Last Updated on: Error';
+            console.error('Error fetching Gamer LB timestamp:', mR.getDetailedMessage());
           }
         });
       });
     }
 
-    function handleGamerSearch() {
-      const searchTerm = this.value.trim().toLowerCase();
-      const filtered = gamerData.filter(user => 
-        user.username.toLowerCase().includes(searchTerm)
-      );
-      renderGamerLeaderboard(filtered);
+    function handleGamerSearch(term) {
+      term = term.trim().toLowerCase();
+      if (!term) {
+        renderGamerLeaderboard(gamerData);
+        return;
+      }
+      const filtered = gamerData.filter(u => u.username.toLowerCase().includes(term));
+      renderGamerLeaderboard(filtered, true);
     }
 
     function getGamerTier(points) {
@@ -833,212 +1171,144 @@
       return { name: 'Gamer I', class: 'gamer1-bg' };
     }
 
-    function renderGamerLeaderboard(users, ranked) {
-      const tableDiv = document.getElementById('gamer-table');
-      tableDiv.innerHTML = '';
-
-      if (users.length === 0) {
-        tableDiv.innerHTML = `
-          <div class="no-results">
-            <i class="fas fa-search"></i>
-            <h3>No users found</h3>
-            <p>Try searching with a different username</p>
-          </div>
-        `;
+    function renderGamerLeaderboard(usersToRender, isSearch = false) {
+      const tbody = document.querySelector('#gamer-leaderboard tbody');
+      tbody.innerHTML = '';
+      if (usersToRender.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="no-results"><i class="fas fa-search"></i>No gamers found.</td></tr>`;
         return;
       }
 
-      const table = document.createElement('table');
-      
-      // Create header
-      const thead = table.createTHead();
-      const headerRow = thead.insertRow();
-      ['#', 'Username', 'Total XP', 'Tier'].forEach(headerText => {
-        const th = document.createElement('th');
-        th.textContent = headerText;
-        headerRow.appendChild(th);
-      });
-
-      // Create body
-      const tbody = table.createTBody();
-      users.slice(0, 50).forEach((user, index) => {
-        const tier = getGamerTier(user.points);
+      usersToRender.forEach((user, idx) => {
         const row = tbody.insertRow();
-        row.style.opacity = "0";
-        setTimeout(() => {
-          row.classList.add('row-appear');
-        }, index * 50);
-        
-        // Rank
-        const rankCell = row.insertCell();
-        rankCell.className = 'rank-cell';
-        if (index === 0) {
-          rankCell.innerHTML = '<span class="rank-1">🥇</span>';
-        } else if (index === 1) {
-          rankCell.innerHTML = '<span class="rank-2">🥈</span>';
-        } else if (index === 2) {
-          rankCell.innerHTML = '<span class="rank-3">🥉</span>';
-        } else {
-          rankCell.innerHTML = `<span class="rank-normal">${index + 1}</span>`;
-        }
+        row.style.animation = `fadeIn 0.5s ease-out ${idx * 0.03}s forwards`;
+        row.style.opacity = '0';
 
-        // Username
+        const rankCell = row.insertCell();
+        const actualRank = isSearch ? gamerData.findIndex(u => u.username === user.username) + 1 : idx + 1;
+
+        if (actualRank === 1) rankCell.innerHTML = `<span class="medal gold">🥇</span>`;
+        else if (actualRank === 2) rankCell.innerHTML = `<span class="medal silver">🥈</span>`;
+        else if (actualRank === 3) rankCell.innerHTML = `<span class="medal bronze">🥉</span>`;
+        else rankCell.innerHTML = `<span class="rank">${actualRank}</span>`;
+
         const userCell = row.insertCell();
         userCell.textContent = user.username;
 
-        // Points
         const pointsCell = row.insertCell();
-        pointsCell.className = 'points';
         pointsCell.textContent = user.points;
 
-        // Tier
+        const tier = getGamerTier(user.points);
         const tierCell = row.insertCell();
-        tierCell.className = tier.class;
         tierCell.textContent = tier.name;
+        tierCell.classList.add(tier.class);
       });
-
-      tableDiv.appendChild(table);
     }
 
-    // Scribe Leaderboard Functions
+    // ------- Scribe Leaderboard -------
     function initScribeLeaderboard() {
-      const SHEET_KEY = '18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo';
-      fetchScribeData(SHEET_KEY);
-      document.getElementById('scribe-search').addEventListener('input', handleScribeSearch);
+      const KEY = '18Ee6QihCWkklF8eX9QdwYuDRjLiKEAI9bHv3PvZAaNo';
+      fetchScribeData(KEY);
+      document.getElementById('scribe-search').addEventListener('input', () => handleScribeSearch(document.getElementById('scribe-search').value));
     }
 
     function fetchScribeData(key) {
-      const query = new google.visualization.Query(
-        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Leaderboard&tq=select%20A,B`
+      // IMPORTANT: Assumes data in sheet named "Leaderboard", columns A (Username), B (Points)
+      const dataQuery = new google.visualization.Query(
+        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Leaderboard&headers=1&tq=select%20A,B`
       );
-      query.send(function (response) {
-        if (response.isError()) {
+      dataQuery.send(resp => {
+        if (resp.isError()) {
           document.querySelector('#scribe-leaderboard tbody').innerHTML =
-            '<tr><td colspan="4" style="color:var(--hem);text-align:center;">Failed to load leaderboard.</td></tr>';
+            `<tr><td colspan="4" class="no-results"><i class="fas fa-exclamation-triangle"></i>Failed to load Scribe leaderboard.</td></tr>`;
+          document.getElementById('scribe-updated').textContent = 'Last Updated on: Error loading data';
+          console.error('Error fetching Scribe scores:', resp.getDetailedMessage());
           return;
         }
-        const dataTable = response.getDataTable();
+        const dt = resp.getDataTable();
         scribeData = [];
-        for (let i = 0; i < dataTable.getNumberOfRows(); i++) {
-          scribeData.push({
-            username: dataTable.getValue(i, 0),
-            points: parseInt(dataTable.getValue(i, 1), 10),
-          });
+        for (let i = 0; i < dt.getNumberOfRows(); i++) {
+          const username = dt.getValue(i, 0);
+          const points = parseInt(dt.getValue(i, 1), 10) || 0;
+           if (username) { // Ensure username is not null or empty
+            scribeData.push({ username, points });
+           }
         }
-        rankedScribeData = [...scribeData].sort((a, b) => b.points - a.points);
-        rankedScribeData.forEach((row, i) => (row.rank = i + 1));
-        renderScribeLeaderboard(rankedScribeData);
+        scribeData.sort((a, b) => b.points - a.points);
+        renderScribeLeaderboard(scribeData);
 
-        // Fetch timestamp from Meta sheet
-        const metaQuery = new google.visualization.Query(
+        // Fetch timestamp from Meta!A1
+        // IMPORTANT: Assumes timestamp in sheet named "Meta", cell A1
+        const metaQ = new google.visualization.Query(
           `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&tq=select%20A`
         );
-        metaQuery.send(metaRes => {
-          if (!metaRes.isError()) {
-            const metaData = metaRes.getDataTable();
-            if (metaData.getNumberOfRows() > 0) {
-              document.getElementById('scribe-updated').textContent = 'Last Updated on ' + metaData.getValue(0, 0);
+        metaQ.send(mR => {
+          if (!mR.isError()) {
+            const mDt = mR.getDataTable();
+            if (mDt.getNumberOfRows() > 0 && mDt.getValue(0,0) != null) {
+              document.getElementById('scribe-updated').textContent =
+                'Last Updated on ' + mDt.getValue(0, 0);
+            } else {
+              document.getElementById('scribe-updated').textContent = 'Last Updated on: N/A';
             }
+          } else {
+            document.getElementById('scribe-updated').textContent = 'Last Updated on: Error';
+            console.error('Error fetching Scribe LB timestamp:', mR.getDetailedMessage());
           }
         });
       });
     }
 
-    function handleScribeSearch() {
-      const searchTerm = this.value.trim().toLowerCase();
-      const filtered = scribeData.filter(user => 
-        user.username.toLowerCase().includes(searchTerm)
-      );
-      renderScribeLeaderboard(filtered);
+    function handleScribeSearch(term) {
+        term = term.trim().toLowerCase();
+      if (!term) {
+        renderScribeLeaderboard(scribeData);
+        return;
+      }
+      const filtered = scribeData.filter(u => u.username.toLowerCase().includes(term));
+      renderScribeLeaderboard(filtered, true);
     }
 
     function getScribeTier(points) {
       if (points >= 400) return { name: 'HEMMINGWAY', class: 'hem-bg' };
-      if (points >= 150) return { name: 'Scribe 2', class: 'scribe2-bg' };
-      return { name: 'Scribe 1', class: 'scribe1-bg' };
+      if (points >= 150) return { name: 'Scribe II', class: 'scribe2-bg' };
+      return { name: 'Scribe I', class: 'scribe1-bg' };
     }
 
-    function renderScribeLeaderboard(users, ranked) {
-      const tableDiv = document.getElementById('scribe-table');
-      tableDiv.innerHTML = '';
-
-      if (users.length === 0) {
-        tableDiv.innerHTML = `
-          <div class="no-results">
-            <i class="fas fa-search"></i>
-            <h3>No users found</h3>
-            <p>Try searching with a different username</p>
-          </div>
-        `;
+    function renderScribeLeaderboard(usersToRender, isSearch = false) {
+      const tbody = document.querySelector('#scribe-leaderboard tbody');
+      tbody.innerHTML = '';
+      if (usersToRender.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" class="no-results"><i class="fas fa-search"></i>No scribes found.</td></tr>`;
         return;
       }
 
-      const table = document.createElement('table');
-      
-      // Create header
-      const thead = table.createTHead();
-      const headerRow = thead.insertRow();
-      ['#', 'Username', 'Total Points', 'Tier'].forEach(headerText => {
-        const th = document.createElement('th');
-        th.textContent = headerText;
-        headerRow.appendChild(th);
-      });
-
-      // Create body
-      const tbody = table.createTBody();
-      users.slice(0, 50).forEach((user, index) => {
-        const tier = getScribeTier(user.points);
+      usersToRender.forEach((user, idx) => {
         const row = tbody.insertRow();
-        row.style.opacity = "0";
-        setTimeout(() => {
-          row.classList.add('row-appear');
-        }, index * 50);
-        
-        // Rank
-        const rankCell = row.insertCell();
-        rankCell.className = 'rank-cell';
-        if (index === 0) {
-          rankCell.innerHTML = '<span class="rank-1">🥇</span>';
-        } else if (index === 1) {
-          rankCell.innerHTML = '<span class="rank-2">🥈</span>';
-        } else if (index === 2) {
-          rankCell.innerHTML = '<span class="rank-3">🥉</span>';
-        } else {
-          rankCell.innerHTML = `<span class="rank-normal">${index + 1}</span>`;
-        }
+        row.style.animation = `fadeIn 0.5s ease-out ${idx * 0.03}s forwards`;
+        row.style.opacity = '0';
 
-        // Username
+        const rankCell = row.insertCell();
+        const actualRank = isSearch ? scribeData.findIndex(u => u.username === user.username) + 1 : idx + 1;
+
+        if (actualRank === 1) rankCell.innerHTML = `<span class="medal gold">🥇</span>`;
+        else if (actualRank === 2) rankCell.innerHTML = `<span class="medal silver">🥈</span>`;
+        else if (actualRank === 3) rankCell.innerHTML = `<span class="medal bronze">🥉</span>`;
+        else rankCell.innerHTML = `<span class="rank">${actualRank}</span>`;
+
         const userCell = row.insertCell();
         userCell.textContent = user.username;
 
-        // Points
         const pointsCell = row.insertCell();
-        pointsCell.className = 'points';
         pointsCell.textContent = user.points;
 
-        // Tier
+        const tier = getScribeTier(user.points);
         const tierCell = row.insertCell();
-        tierCell.className = tier.class;
         tierCell.textContent = tier.name;
-      });
-
-      tableDiv.appendChild(table);
-    }
-
-    function fetchPFPs(key) {
-      return new Promise(resolve => {
-        const q = new google.visualization.Query(
-          `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?gid=0&headers=1&tq=select%20B%2C%20F`
-        );
-        q.send(res => {
-          const dt = res.getDataTable(), map = {};
-          for (let i = 0; i < dt.getNumberOfRows(); i++) {
-            map[dt.getValue(i, 0)] = dt.getValue(i, 1);
-          }
-          resolve(map);
-        });
+        tierCell.classList.add(tier.class);
       });
     }
-  </script>
+
+</script>
 </body>
-</html> 
+</html>
