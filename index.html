@@ -1,3 +1,5 @@
+NICE GLOWY WORKING
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1030,8 +1032,7 @@
       const table = document.createElement('table');
       const thead = table.createTHead();
       const hr = thead.insertRow();
-      // Only three headers now
-      ['#', 'User', 'Points'].forEach(text => {
+      ['#', 'User', 'Points', ''].forEach(text => {
         const th = document.createElement('th');
         th.textContent = text;
         hr.appendChild(th);
@@ -1088,7 +1089,7 @@
         pointsCell.className = 'points';
         pointsCell.textContent = user.points.toFixed(2);
 
-        // Removed the extra empty cell
+        row.insertCell(); // empty column for potential actions
       });
       container.appendChild(table);
     }
