@@ -401,7 +401,7 @@
     .username-text {
       transition: color 0.3s ease;
       position: relative;
-       white-space: nowrap;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 180px; /* Adjust as needed */
@@ -437,10 +437,9 @@
       align-items: center;
       gap: 1rem;
     }
-     .no-results i, .no-results .no-results-icon {
-        font-size: 2rem;
-     }
-
+    .no-results i, .no-results .no-results-icon {
+      font-size: 2rem;
+    }
 
     .back-button {
       background: rgba(255, 255, 255, 0.1);
@@ -478,11 +477,11 @@
       color: #1DA1F2;
     }
 
-    /* ======== Gamer & Scribe Styles ======== */
+    /* ======== Gamer & Scribe Styles (Matched to YAP) ======== */
     .tab-container {
       display: none;
       flex-direction: column;
-      gap: 1.5rem; /* Adjusted gap */
+      gap: 1.5rem;
       animation: fadeIn 0.7s ease-out both;
     }
 
@@ -493,25 +492,25 @@
     .legend {
       display: flex;
       justify-content: center;
-      flex-wrap: wrap; /* Allow legend items to wrap */
-      gap: 1rem 1.5rem; /* row-gap column-gap */
-      margin-bottom: 0.5rem; /* Reduced margin */
+      flex-wrap: wrap;
+      gap: 1rem 1.5rem;
+      margin-bottom: 0.5rem;
     }
 
     .legend-item {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.9rem; /* Slightly smaller legend text */
+      font-size: 0.9rem;
       color: var(--text);
     }
 
     .swatch {
-      width: 16px; /* Slightly smaller swatch */
+      width: 16px;
       height: 16px;
       border-radius: 4px;
       display: inline-block;
-      border: 1px solid #fff2; /* Adjusted border */
+      border: 1px solid #fff2;
       background-clip: padding-box;
     }
 
@@ -523,7 +522,7 @@
     .scribe2 { background: linear-gradient(135deg, #389FFF 0%, #00E5FF 100%); }
     .hem    { background: linear-gradient(135deg, #389FFF 0%, #FE4208 100%); }
 
-    /* Tier background classes - !important to override potential conflicts */
+    /* Tier background classes */
     .gamer1-bg  { background: linear-gradient(135deg, rgba(56,159,255,0.7) 0%, rgba(110,198,255,0.7) 100%) !important; color: #fff !important; }
     .gamer2-bg  { background: linear-gradient(135deg, rgba(56,159,255,0.7) 0%, rgba(0,229,255,0.7) 100%) !important; color: #fff !important; }
     .faker-bg   { background: linear-gradient(135deg, rgba(56,159,255,0.7) 0%, rgba(254,66,8,0.7) 100%) !important; color: #fff !important; }
@@ -531,50 +530,49 @@
     .scribe2-bg { background: linear-gradient(135deg, rgba(56,159,255,0.7) 0%, rgba(0,229,255,0.7) 100%) !important; color: #fff !important; }
     .hem-bg     { background: linear-gradient(135deg, rgba(56,159,255,0.7) 0%, rgba(254,66,8,0.7) 100%) !important; color: #fff !important; }
 
-
     .search-bar-wrap {
       display: flex;
       justify-content: center;
-      margin-bottom: 0.5rem; /* Reduced margin */
+      margin-bottom: 0.5rem;
       width: 100%;
-      max-width: 400px; /* Max width for search bar */
+      max-width: 400px;
       margin-left: auto;
       margin-right: auto;
       position: relative;
-      z-index: 2; /* Ensure search bar is above table content if sticky is added later */
+      z-index: 2;
     }
 
-    .search-bar { /* Gamer/Scribe search bar */
+    .search-bar {
       display: flex;
       align-items: center;
-      background: rgba(26, 26, 26, 0.9); /* Slightly more opaque */
-      border-radius: 50px; /* Rounded like YAP search */
+      background: rgba(26, 26, 26, 0.9);
+      border-radius: 50px;
       box-shadow: 0 1px 8px #0003;
-      padding: 0px 15px 0px 0px; /* Adjusted padding */
+      padding: 0px 15px 0px 0px;
       width: 100%;
       transition: box-shadow .2s, border .2s, background .2s;
       border: 1px solid var(--border);
     }
-    .search-bar .search-icon { /* Specific for Gamer/Scribe search icon */
-        position: static; /* Overriding absolute positioning from general .search-icon */
-        transform: none;
-        margin-left: 15px; /* Add some padding for the icon */
-        margin-right: 8px;
-        color: var(--muted);
-        font-size: 1rem;
-        transition: color 0.2s;
-    }
 
+    .search-bar .search-icon {
+      position: static;
+      transform: none;
+      margin-left: 15px;
+      margin-right: 8px;
+      color: var(--muted);
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
 
     .search-bar:focus-within {
       border-color: var(--orange);
       box-shadow: 0 0 0 3px rgba(255, 61, 20, 0.2);
       background: rgba(255, 255, 255, 0.12);
     }
-     .search-bar:focus-within .search-icon {
-        color: var(--orange);
-     }
 
+    .search-bar:focus-within .search-icon {
+      color: var(--orange);
+    }
 
     .search-bar input {
       background: transparent;
@@ -583,130 +581,153 @@
       font-size: 1rem;
       outline: none;
       width: 100%;
-      padding: 10px 15px 10px 0px; /* Adjusted padding */
+      padding: 10px 15px 10px 0px;
       font-family: 'Inter', sans-serif;
       transition: color 0.2s;
     }
-     .search-bar input::placeholder {
-        color: rgba(255,255,255,0.5);
-     }
+
+    .search-bar input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
 
     .search-bar input:focus {
       color: #fff;
     }
 
-    .table-scroll { /* Gamer/Scribe table scroll container */
-      max-height: 60vh; /* Adjusted height */
+    .table-scroll {
+      max-height: 60vh;
       overflow-y: auto;
       border-radius: var(--radius);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-      background: var(--panel-bg); /* Same as YAP panel */
-      border: 1px solid var(--border); /* Same as YAP panel */
-      transition: background 0.2s;
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .table-scroll:hover {
+      box-shadow: 0 15px 40px rgba(255, 61, 20, 0.15);
+      transform: translateY(-5px);
     }
 
     .table-scroll::-webkit-scrollbar {
       width: 8px;
-      background: rgba(255,255,255,0.05); /* Consistent scrollbar track */
+      background: rgba(255,255,255,0.05);
     }
 
     .table-scroll::-webkit-scrollbar-thumb {
-      background: rgba(255,61,20,0.5); /* Consistent scrollbar thumb */
+      background: rgba(255,61,20,0.5);
       border-radius: 20px;
     }
 
-    .table-scroll { /* Firefox scrollbar styling */
+    .table-scroll {
       scrollbar-width: thin;
       scrollbar-color: rgba(255,61,20,0.5) rgba(255,255,255,0.05);
     }
 
-    .leaderboard-table { /* Gamer/Scribe table */
+    .leaderboard-table {
       width: 100%;
-      border-collapse: separate; /* Use separate for border-spacing and rounded corners on table */
-      border-spacing: 0;
-      background: transparent; /* Background is on .table-scroll */
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: transparent;
       font-family: 'Inter', sans-serif;
-      border-radius: var(--radius); /* For overflow hidden to work */
-      overflow: hidden; /* Clip sticky header corners */
+      color: var(--text);
     }
 
     .leaderboard-table th,
     .leaderboard-table td {
-      padding: 0.8rem 1rem; /* Adjusted padding */
-      text-align: left; /* Align text left for better readability */
-      font-size: 0.95rem; /* Adjusted font size */
+      padding: 1rem 1.25rem;
+      text-align: left;
+      font-size: 1rem;
       transition: background 0.2s;
-      color: var(--text);
-      border-bottom: 1px solid var(--border); /* Add subtle row separators */
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      border-bottom: 1px solid var(--border);
     }
-     .leaderboard-table tr:last-child td {
-        border-bottom: none; /* Remove border for the last row */
-     }
 
+    .leaderboard-table tr:last-child td {
+      border-bottom: none;
+    }
 
     .leaderboard-table th {
-      background: linear-gradient(90deg, #FF3D14, #FF6B14); /* Consistent header */
+      background: linear-gradient(90deg, #FF3D14, #FF6B14);
       color: #fff;
-      font-weight: 700; /* Bolder headers */
+      font-weight: 700;
       position: sticky;
       top: 0;
       z-index: 1;
-      font-family: 'Oswald', sans-serif; /* Oswald for headers */
+      font-family: 'Oswald', sans-serif;
       letter-spacing: 0.5px;
-      border-bottom: 2px solid rgba(255,61,20,0.5); /* Stronger border for header */
-    }
-    /* Specific column alignments for Gamer/Scribe tables */
-    .leaderboard-table th:first-child, .leaderboard-table td:first-child { /* Rank */
-        text-align: center;
-        width: 15%; /* Width for rank */
-    }
-    .leaderboard-table th:nth-child(2), .leaderboard-table td:nth-child(2) { /* Username */
-        width: 45%; /* Width for username */
-    }
-    .leaderboard-table th:nth-child(3), .leaderboard-table td:nth-child(3) { /* Points/XP */
-        text-align: right;
-        width: 20%; /* Width for points */
-    }
-     .leaderboard-table th:last-child, .leaderboard-table td:last-child { /* Tier */
-        text-align: center;
-        width: 20%; /* Width for tier */
+      border-bottom: 2px solid rgba(255,61,20,0.5);
     }
 
+    .leaderboard-table th:first-child, .leaderboard-table td:first-child {
+      text-align: center;
+      width: 15%;
+    }
+
+    .leaderboard-table th:nth-child(2), .leaderboard-table td:nth-child(2) {
+      width: 45%;
+    }
+
+    .leaderboard-table th:nth-child(3), .leaderboard-table td:nth-child(3) {
+      text-align: right;
+      width: 20%;
+    }
+
+    .leaderboard-table th:last-child, .leaderboard-table td:last-child {
+      text-align: center;
+      width: 20%;
+    }
 
     .leaderboard-table tbody tr {
-      transition: background 0.2s, opacity 0.3s;
-      /* opacity: 0; Animation handled by JS for smoother loading */
-      /* animation: fadeIn 0.7s forwards; */
+      transition: all 0.3s ease;
+      background: transparent;
     }
-     .leaderboard-table tbody tr:nth-child(even) {
-        background: var(--table-row); /* Consistent even row background */
-     }
+
+    .leaderboard-table tbody tr:nth-child(even) {
+      background: var(--table-row);
+    }
 
     .leaderboard-table tbody tr:hover {
-      background: var(--highlight) !important; /* Consistent hover */
+      background: var(--highlight) !important;
+      transform: translateX(5px);
     }
 
-    .rank { /* For rank text if not a medal */
+    /* Top 3 positions styling for Gamer & Scribe */
+    .leaderboard-table tbody tr:nth-child(1) td:first-child {
+      animation: pulseGold 2s infinite alternate;
+    }
+
+    .leaderboard-table tbody tr:nth-child(2) td:first-child {
+      animation: pulseSilver 2s infinite alternate;
+    }
+
+    .leaderboard-table tbody tr:nth-child(3) td:first-child {
+      animation: pulseBronze 2s infinite alternate;
+    }
+
+    .rank {
       font-weight: 700;
-      color: var(--muted); /* Muted color for normal ranks */
+      color: var(--muted);
       font-size: 1rem;
       font-family: 'Oswald', sans-serif;
     }
 
     .medal {
-      font-size: 1.3em; /* Adjusted medal size */
+      font-size: 1.3em;
       margin-right: 4px;
       vertical-align: middle;
     }
+
     .medal.gold { color: gold; }
     .medal.silver { color: silver; }
     .medal.bronze { color: #cd7f32; }
 
-
     /* ======== Responsive ======== */
     @media (max-width: 768px) {
       .container {
-        padding: 2rem 0.5rem; /* Reduced padding on smaller screens */
+        padding: 2rem 0.5rem;
       }
       .header h1 {
         font-size: 2.5rem;
@@ -718,7 +739,7 @@
       #table_div td,
       .leaderboard-table th,
       .leaderboard-table td {
-        padding: 0.75rem 0.5rem; /* Reduced padding in tables */
+        padding: 0.75rem 0.5rem;
         font-size: 0.9rem;
       }
       .pfp {
@@ -726,8 +747,8 @@
         height: 28px;
         margin-right: 0.5rem;
       }
-       .username-text {
-        max-width: 120px; /* Adjust for smaller screens */
+      .username-text {
+        max-width: 120px;
       }
       #table_div th:nth-child(1),
       #table_div td:nth-child(1) {
@@ -736,8 +757,8 @@
       .search-bar-wrap {
         max-width: 90%;
       }
-       .legend { gap: 0.5rem 1rem; }
-       .legend-item { font-size: 0.8rem; }
+      .legend { gap: 0.5rem 1rem; }
+      .legend-item { font-size: 0.8rem; }
     }
 
     @media (max-width: 480px) {
@@ -747,37 +768,35 @@
       .subtitle {
         font-size: 0.9rem;
       }
-       .categories {
+      .categories {
         gap: 0.5rem;
         flex-wrap: wrap;
-       }
-       .category-btn {
+      }
+      .category-btn {
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
-       }
+      }
       #search-input {
         font-size: 0.9rem;
         padding: 10px 15px 10px 40px;
       }
       #table_div th:nth-child(3),
       #table_div td:nth-child(3) {
-        width: 5rem; /* Adjusted YAP points column */
+        width: 5rem;
       }
-       .leaderboard-table th,
-       .leaderboard-table td {
-        font-size: 0.85rem; /* Smaller font in tables */
+      .leaderboard-table th,
+      .leaderboard-table td {
+        font-size: 0.85rem;
         padding: 0.6rem 0.4rem;
       }
-       .username-text {
+      .username-text {
         max-width: 80px;
       }
-        /* Adjust column widths for very small screens for Gamer/Scribe tables */
-        .leaderboard-table th:first-child, .leaderboard-table td:first-child { width: 12%; }
-        .leaderboard-table th:nth-child(2), .leaderboard-table td:nth-child(2) { width: 40%; }
-        .leaderboard-table th:nth-child(3), .leaderboard-table td:nth-child(3) { width: 23%; }
-        .leaderboard-table th:last-child, .leaderboard-table td:last-child { width: 25%; }
-
-        .medal { font-size: 1.1em;}
+      .leaderboard-table th:first-child, .leaderboard-table td:first-child { width: 12%; }
+      .leaderboard-table th:nth-child(2), .leaderboard-table td:nth-child(2) { width: 40%; }
+      .leaderboard-table th:nth-child(3), .leaderboard-table td:nth-child(3) { width: 23%; }
+      .leaderboard-table th:last-child, .leaderboard-table td:last-child { width: 25%; }
+      .medal { font-size: 1.1em; }
     }
   </style>
 </head>
@@ -861,7 +880,7 @@
       </div>
       <div class="search-bar-wrap">
         <form class="search-bar" onsubmit="event.preventDefault(); handleScribeSearch();">
-           <i class="fas fa-search search-icon"></i>
+          <i class="fas fa-search search-icon"></i>
           <input id="scribe-search" type="text" placeholder="Search username..." autocomplete="off" />
         </form>
       </div>
@@ -892,7 +911,6 @@
     const yapSearchInput = document.getElementById('search-input');
     const yapClearSearchBtn = document.getElementById('clear-search');
     const yapBackButton = document.getElementById('back-button');
-
 
     categoryBtns.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1023,7 +1041,6 @@
         row.style.animation = `fadeIn 0.5s ease-out ${idx * 0.03}s forwards`;
         row.style.opacity = '0';
 
-
         const rankCell = row.insertCell();
         const displayRank = allUsers.findIndex(u => u.username === user.username) + 1;
 
@@ -1039,8 +1056,7 @@
         } else {
           rankCell.textContent = displayRank.toString();
         }
-         if (displayRank <=3) rankCell.style.fontWeight = '700';
-
+        if (displayRank <= 3) rankCell.style.fontWeight = '700';
 
         const userCell = row.insertCell();
         userCell.className = 'username-cell';
@@ -1079,7 +1095,6 @@
     function fetchPFPs(key) {
       return new Promise(resolve => {
         const q = new google.visualization.Query(
-          // Assuming username in Column B, PFP URL in Column F of the *first sheet (gid=0)*
           `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?gid=0&headers=1&tq=select%20B%2C%20F`
         );
         q.send(res => {
@@ -1109,7 +1124,6 @@
     }
 
     function fetchGamerData(key) {
-      // IMPORTANT: Assumes data in sheet named "Leaderboard", columns A (Username), B (XP)
       const dataQuery = new google.visualization.Query(
         `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Leaderboard&headers=1&tq=select%20A,B`
       );
@@ -1126,15 +1140,13 @@
         for (let i = 0; i < dt.getNumberOfRows(); i++) {
           const username = dt.getValue(i, 0);
           const points = parseInt(dt.getValue(i, 1), 10) || 0;
-          if (username) { // Ensure username is not null or empty
-             gamerData.push({ username, points });
+          if (username) {
+            gamerData.push({ username, points });
           }
         }
         gamerData.sort((a, b) => b.points - a.points);
         renderGamerLeaderboard(gamerData);
 
-        // Fetch timestamp from Meta!A1
-        // IMPORTANT: Assumes timestamp in sheet named "Meta", cell A1
         const metaQ = new google.visualization.Query(
           `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&tq=select%20A`
         );
@@ -1213,7 +1225,6 @@
     }
 
     function fetchScribeData(key) {
-      // IMPORTANT: Assumes data in sheet named "Leaderboard", columns A (Username), B (Points)
       const dataQuery = new google.visualization.Query(
         `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Leaderboard&headers=1&tq=select%20A,B`
       );
@@ -1230,15 +1241,13 @@
         for (let i = 0; i < dt.getNumberOfRows(); i++) {
           const username = dt.getValue(i, 0);
           const points = parseInt(dt.getValue(i, 1), 10) || 0;
-           if (username) { // Ensure username is not null or empty
+          if (username) {
             scribeData.push({ username, points });
-           }
+          }
         }
         scribeData.sort((a, b) => b.points - a.points);
         renderScribeLeaderboard(scribeData);
 
-        // Fetch timestamp from Meta!A1
-        // IMPORTANT: Assumes timestamp in sheet named "Meta", cell A1
         const metaQ = new google.visualization.Query(
           `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Meta&tq=select%20A`
         );
@@ -1260,7 +1269,7 @@
     }
 
     function handleScribeSearch(term) {
-        term = term.trim().toLowerCase();
+      term = term.trim().toLowerCase();
       if (!term) {
         renderScribeLeaderboard(scribeData);
         return;
@@ -1308,7 +1317,6 @@
         tierCell.classList.add(tier.class);
       });
     }
-
 </script>
 </body>
 </html>
