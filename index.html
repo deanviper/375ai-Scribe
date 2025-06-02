@@ -1,5 +1,3 @@
-NICE GLOWY WORKING
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -308,10 +306,13 @@ NICE GLOWY WORKING
       letter-spacing: 0.5px;
     }
 
-    #table_div th:nth-child(1), /* Rank column */
+    /* Rank column: allow overflow to remove the “…” */
+    #table_div th:nth-child(1),
     #table_div td:nth-child(1) {
       width: 4rem;
       text-align: center;
+      overflow: visible;
+      text-overflow: clip;
     }
 
     #table_div th:nth-child(3), /* Points column */
@@ -645,19 +646,24 @@ NICE GLOWY WORKING
       white-space: nowrap;
       text-overflow: ellipsis;
       border-bottom: 1px solid var(--border);
+      background: transparent; /* Remove per-cell gradient */
     }
 
     .leaderboard-table tr:last-child td {
       border-bottom: none;
     }
 
-    .leaderboard-table th {
+    /* Apply a continuous gradient to the entire header row */
+    .leaderboard-table thead tr {
       background: linear-gradient(90deg, #FF3D14, #FF6B14);
-      color: #fff;
-      font-weight: 700;
       position: sticky;
       top: 0;
       z-index: 1;
+    }
+
+    .leaderboard-table th {
+      color: #fff;
+      font-weight: 700;
       font-family: 'Oswald', sans-serif;
       letter-spacing: 0.5px;
       border-bottom: 2px solid rgba(255,61,20,0.5);
