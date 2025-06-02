@@ -1053,13 +1053,13 @@
         const displayRank = allUsers.findIndex(u => u.username === user.username) + 1;
 
         if (displayRank === 1) {
-          rankCell.innerHTML = '<span class="medal gold">🥇</span> 1';
+          rankCell.innerHTML = '<span class="medal gold">🥇</span>';
           rankCell.style.color = 'gold';
         } else if (displayRank === 2) {
-          rankCell.innerHTML = '<span class="medal silver">🥈</span> 2';
+          rankCell.innerHTML = '<span class="medal silver">🥈</span>';
           rankCell.style.color = 'silver';
         } else if (displayRank === 3) {
-          rankCell.innerHTML = '<span class="medal bronze">🥉</span> 3';
+          rankCell.innerHTML = '<span class="medal bronze">🥉</span>';
           rankCell.style.color = '#cd7f32';
         } else {
           rankCell.textContent = displayRank.toString();
