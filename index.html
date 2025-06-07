@@ -1258,7 +1258,7 @@
 
     function fetchScribeData(key) {
       const dataQuery = new google.visualization.Query(
-        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Leaderboard&headers=1&tq=select%20A,B`
+        `https://docs.google.com/spreadsheets/d/${key}/gviz/tq?sheet=Temporary%20LB&headers=1&tq=select%20A,B`
       );
       dataQuery.send(resp => {
         if (resp.isError()) {
